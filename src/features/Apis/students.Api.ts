@@ -22,7 +22,7 @@ export const studentApi = createApi({
     }),
     getStudentById: builder.query({
       query: (studentId) => `/${studentId}`,
-      providesTags: (result, error, studentId) => [{ type: 'Student', id: studentId }],
+      providesTags: (_result, _error, studentId) => [{ type: 'Student', id: studentId }],
     }),
     updateStudent: builder.mutation({
       query: ({ studentId, ...patchData }) => ({
@@ -30,7 +30,7 @@ export const studentApi = createApi({
         method: 'PUT',
         body: patchData,
       }),
-      invalidatesTags: (result, error, { studentId }) => [
+      invalidatesTags: (_result, _error, { studentId }) => [
         { type: 'Student', id: studentId },
         'Student',
       ],
@@ -52,7 +52,7 @@ export const studentApi = createApi({
     }),
     getStudentEnrollmentHistory: builder.query({
       query: (studentId) => `/${studentId}/enrollment-history`,
-      providesTags: (result, error, studentId) => [{ type: 'EnrollmentHistory', id: studentId }],
+      providesTags: (_result, _error, studentId) => [{ type: 'EnrollmentHistory', id: studentId }],
     }),
   }),
 });

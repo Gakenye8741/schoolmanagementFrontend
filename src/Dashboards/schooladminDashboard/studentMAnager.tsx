@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import {
   useGetStudentsBySchoolQuery,
   useCreateStudentMutation,
-  useUpdateStudentMutation,
   useDeleteStudentMutation,
 } from '../../features/Apis/students.Api';
 import { useLinkParentMutation } from '../../features/Apis/Auth.Api';
@@ -44,7 +43,6 @@ export const StudentManager: React.FC = () => {
     : (studentsResponse?.data || studentsResponse?.students || []);
 
   const [createStudent, { isLoading: isCreating }] = useCreateStudentMutation();
-  const [updateStudent] = useUpdateStudentMutation();
   const [deleteStudent] = useDeleteStudentMutation();
   const [linkParent] = useLinkParentMutation();
 

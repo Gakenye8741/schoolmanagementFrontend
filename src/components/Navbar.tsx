@@ -9,7 +9,6 @@ import {
   Moon,
   ChevronDown,
   UserCheck,
-  User,
   LogOut,
   UserPlus,
   GraduationCap,

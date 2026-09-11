@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { AdminSideNav } from "../DashboardDesigns/AdminSIdenav";
-import { Menu, ChevronLeft, ChevronRight, ShieldCheck, Sparkles, Building2, Activity, Users, DollarSign, FileText } from "lucide-react";
+import { Menu, ChevronLeft, ChevronRight, ShieldCheck, Sparkles } from "lucide-react";
 import { Navbar } from "../../components/Navbar";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../App/store";

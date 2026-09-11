@@ -33,18 +33,19 @@ export default function TermManager() {
     skip: !currentSchoolId,
   });
   const schoolName = school?.name || user?.schoolName || user?.user?.schoolName || 'Your Institution';
+  const primaryColor = school?.primaryColor || '#6366f1';
+  const secondaryColor = school?.secondaryColor || '#f59e0b';
 
   // API Hooks
- // Inside TermManager.tsx, destructure 'refetch' from your query hook
-const { 
-  data: termsData, 
-  isLoading: isLoadingTerms, 
-  error: termsError, 
-  refetch: refetchTerms 
-} = useGetTermsBySchoolIdQuery(currentSchoolId, {
-  skip: !currentSchoolId,
-});
-  console.log(termsData);
+  const { 
+    data: termsData, 
+    isLoading: isLoadingTerms, 
+    error: termsError, 
+    refetch: refetchTerms 
+  } = useGetTermsBySchoolIdQuery(currentSchoolId, {
+    skip: !currentSchoolId,
+  });
+  console.log(termsData, refetchTerms);
   const { data: currentTermData } = useGetCurrentTermBySchoolIdQuery(currentSchoolId, {
     skip: !currentSchoolId,
   });
@@ -207,11 +208,17 @@ const {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 bg-base-100 text-base-content min-h-screen">
       
       {/* Top Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-primary/15 via-base-200 to-secondary/15 p-8 sm:p-10 rounded-3xl border border-base-300 shadow-sm">
+      <div 
+        className="relative overflow-hidden bg-gradient-to-br from-primary/15 via-base-200 to-secondary/15 p-8 sm:p-10 rounded-3xl border shadow-sm"
+        style={{ borderColor: `${secondaryColor}40` }}
+      >
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 rounded-full bg-primary/10 blur-3xl pointer-events-none"></div>
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary text-primary-content text-xs font-black rounded-full uppercase tracking-wider shadow-xs">
+            <div 
+              className="inline-flex items-center gap-2 px-3 py-1 text-white text-xs font-black rounded-full uppercase tracking-wider shadow-xs"
+              style={{ backgroundColor: secondaryColor }}
+            >
               <Sparkles className="w-3.5 h-3.5" /> School Calendar
             </div>
             <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-primary">Manage Terms & Schedules</h1>
@@ -221,7 +228,7 @@ const {
           </div>
           
           <div className="flex items-center gap-4 bg-base-100/80 backdrop-blur-md px-6 py-4 rounded-2xl border border-base-300 shadow-sm">
-            <div className="p-3 bg-primary/10 text-primary rounded-xl">
+            <div className="p-3 bg-primary/10 text-primary rounded-xl" style={{ borderLeft: `4px solid ${secondaryColor}` }}>
               <Calendar className="w-6 h-6" />
             </div>
             <div>
@@ -241,6 +248,7 @@ const {
               ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' 
               : 'bg-base-200/50 hover:bg-base-200 opacity-75'
           }`}
+          style={activeTab === 'terms' ? { borderBottom: `4px solid ${secondaryColor}` } : {}}
         >
           <Calendar className="w-4 h-4" /> Academic Terms
         </button>
@@ -251,6 +259,7 @@ const {
               ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' 
               : 'bg-base-200/50 hover:bg-base-200 opacity-75'
           }`}
+          style={activeTab === 'windows' ? { borderBottom: `4px solid ${secondaryColor}` } : {}}
         >
           <Layers className="w-4 h-4" /> Breaks & Exam Schedules
         </button>
@@ -392,7 +401,8 @@ const {
               <button
                 type="submit"
                 disabled={isCreatingTerm || isUpdatingTerm}
-                className="w-full bg-primary text-primary-content font-black py-3.5 px-6 rounded-2xl hover:opacity-95 transition-all shadow-lg shadow-primary/20 text-xs uppercase tracking-wider cursor-pointer mt-4"
+                className="w-full text-white font-black py-3.5 px-6 rounded-2xl hover:opacity-95 transition-all shadow-lg text-xs uppercase tracking-wider cursor-pointer mt-4"
+                style={{ backgroundColor: primaryColor, boxShadow: `0 4px 14px ${primaryColor}40` }}
               >
                 {isCreatingTerm || isUpdatingTerm ? 'Saving...' : isEditing ? 'Update Term' : 'Create Term'}
               </button>
@@ -403,7 +413,7 @@ const {
           <div className="lg:col-span-7 bg-base-200/40 backdrop-blur-xl border border-base-300/80 p-8 rounded-3xl shadow-xl space-y-6">
             <div className="flex items-center justify-between pb-4 border-b border-base-300">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-secondary/10 text-secondary rounded-xl">
+                <div className="p-2.5 rounded-xl" style={{ backgroundColor: `${secondaryColor}20`, color: secondaryColor }}>
                   <Calendar className="w-5 h-5" />
                 </div>
                 <h2 className="text-lg font-black tracking-tight">All Academic Terms</h2>
@@ -437,7 +447,8 @@ const {
                     <div className="flex items-center gap-2 w-full md:w-auto justify-end">
                       <button
                         onClick={() => { setSelectedTermId(term.id); setActiveTab('windows'); }}
-                        className="px-3 py-1.5 bg-secondary/10 text-secondary rounded-xl text-xs font-bold hover:bg-secondary/20 transition-all cursor-pointer"
+                        className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                        style={{ backgroundColor: `${secondaryColor}20`, color: secondaryColor }}
                         title="View Schedules"
                       >
                         Schedules
@@ -561,7 +572,8 @@ const {
               <button
                 type="submit"
                 disabled={isCreatingWindow}
-                className="w-full bg-primary text-primary-content font-black py-3.5 px-6 rounded-2xl hover:opacity-95 transition-all shadow-lg shadow-primary/20 text-xs uppercase tracking-wider cursor-pointer mt-4"
+                className="w-full text-white font-black py-3.5 px-6 rounded-2xl hover:opacity-95 transition-all shadow-lg text-xs uppercase tracking-wider cursor-pointer mt-4"
+                style={{ backgroundColor: primaryColor, boxShadow: `0 4px 14px ${primaryColor}40` }}
               >
                 {isCreatingWindow ? 'Adding Schedule...' : 'Add Schedule'}
               </button>
@@ -572,7 +584,7 @@ const {
           <div className="lg:col-span-7 bg-base-200/40 backdrop-blur-xl border border-base-300/80 p-8 rounded-3xl shadow-xl space-y-6">
             <div className="flex items-center justify-between pb-4 border-b border-base-300">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-secondary/10 text-secondary rounded-xl">
+                <div className="p-2.5 rounded-xl" style={{ backgroundColor: `${secondaryColor}20`, color: secondaryColor }}>
                   <Layers className="w-5 h-5" />
                 </div>
                 <h2 className="text-lg font-black tracking-tight">Term Schedules & Breaks</h2>

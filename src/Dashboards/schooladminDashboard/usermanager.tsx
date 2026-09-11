@@ -5,11 +5,9 @@ import {
   useGetTeachersBySchoolQuery,
   useGetUsersQuery,
   useCreateUserMutation,
-  useUpdateUserMutation,
   useDeleteUserMutation,
   useUpdateUserStatusMutation,
   useBulkUpdateUserStatusMutation,
-  useCheckAdmissionNumberQuery,
 } from '../../features/Apis/Users.Api';
 import { useGetSchoolByIdQuery } from '../../features/Apis/School.Api';
 import { 
@@ -21,8 +19,6 @@ import {
   Sparkles, 
   Building,
   RefreshCw,
-  UserCheck,
-  Shield,
   Search,
   Filter,
   UserX
@@ -96,7 +92,6 @@ export const UserManager: React.FC = () => {
   });
 
   const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
-  const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
   const [updateUserStatus] = useUpdateUserStatusMutation();
   const [bulkUpdateStatus] = useBulkUpdateUserStatusMutation();

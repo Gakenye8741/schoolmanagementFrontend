@@ -29,8 +29,6 @@ const Login = () => {
       dispatch(
         setCredentials({
           user: res.user,
-          token: res.token,
-          role: res.user.role,
         })
       );
 

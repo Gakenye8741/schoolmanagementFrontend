@@ -3,13 +3,12 @@ import {
   LogOut,
   School2,
   GraduationCap,
-  Calendar1Icon,
+  
   Book,
   TestTube,
   Users,
   Layers,
-  UserCheck,
-  CalendarDays,
+  
   FileSpreadsheet,
   Award,
 } from "lucide-react";
@@ -47,7 +46,7 @@ export const SchoolAdminSideNav = ({
   });
 
   const primaryColor = school?.primaryColor || '#6366f1';
-  const secondaryColor = school?.secondaryColor || '#f59e0b';
+ 
 
   const handleLogout = () => {
     dispatch(clearCredentials());
