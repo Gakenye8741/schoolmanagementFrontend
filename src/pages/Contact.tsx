@@ -12,8 +12,14 @@ import { Link } from 'react-router-dom';
 import { Toaster, toast } from 'sonner';
 import { useState } from 'react';
 import { Footer } from '../components/Footer';
+import { usePageSeo } from '../hooks/usePageSeo';
 
 const ContactPage = () => {
+  usePageSeo({
+    title: "Contact ElimuCloud | Institutional Support & Engineering Inquiries",
+    description: "Get in touch with the ElimuCloud team for platform demonstrations, institutional onboarding, or technical support. Engineered by full-stack developer Brian Gakenye Ndiritu.",
+    keywords: "contact ElimuCloud, school software support Kenya, institutional software demo, Brian Gakenye Ndiritu, ElimuCloud helpdesk"
+  });
   const [formData, setFormData] = useState({
     schoolName: '',
     contactPerson: '',

@@ -7,6 +7,7 @@ import { Eye, EyeOff, Lock, Mail, ShieldCheck, ArrowRight } from 'lucide-react';
 import { useLoginUserMutation } from '../../features/Apis/Auth.Api';
 import { setCredentials } from '../../features/Auth/AuthSlice';
 import { Navbar } from '../../components/Navbar';
+import { usePageSeo } from '../../hooks/usePageSeo';
 
 interface LoginDetails {
   identifier: string;
@@ -14,6 +15,11 @@ interface LoginDetails {
 }
 
 const Login = () => {
+  usePageSeo({
+    title: "Login | ElimuCloud Secure Multi-Tenant School Portal",
+    description: "Access your institutional portal securely. Role-based login for administrators, teachers, accountants, parents, and students on ElimuCloud, engineered by  Gakenye Ndiritu.",
+    keywords: "ElimuCloud login, school portal sign in, student portal Kenya, school management system login,  Gakenye Ndiritu"
+  });
   const { register, handleSubmit, formState: { errors } } = useForm<LoginDetails>();
   const [loginUser, { isLoading }] = useLoginUserMutation();
   const navigate = useNavigate();

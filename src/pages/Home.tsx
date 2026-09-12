@@ -4,7 +4,6 @@ import {
   ArrowRight, 
   BarChart3, 
   Users, 
-
   Zap,
   ChevronRight,
   Building,
@@ -15,8 +14,15 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../App/store";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import { usePageSeo } from "../hooks/usePageSeo";
 
 const Home = () => {
+  usePageSeo({
+    title: "Smart Multi-Tenant School Management Platform | ElimuCloud",
+    description: "ElimuCloud unifies student registration, fee collections, grade tracking, and role-based portals into a single, lightning-fast cloud workspace for modern educational institutions. Conceptualized and engineered by full-stack developer Brian Gakenye Ndiritu.",
+    keywords: "school management system, school software Kenya, multi-tenant school ERP, student portal, fee collection software, ElimuCloud, Brian Gakenye Ndiritu"
+  });
+
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.auth.user);
   const role = useSelector((state: RootState) => state.auth.role);

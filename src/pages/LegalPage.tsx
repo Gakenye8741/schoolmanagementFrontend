@@ -1,8 +1,14 @@
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { Shield, Lock, Database, Server, FileText, CheckCircle, HelpCircle, UserCheck } from 'lucide-react';
+import { usePageSeo } from '../hooks/usePageSeo';
 
 export const LegalHubPage = () => {
+  usePageSeo({
+    title: "Terms of Service & Privacy Policy | ElimuCloud",
+    description: "Review ElimuCloud's terms of service, data privacy commitments, and institutional compliance standards. Engineered by full-stack developer Brian Gakenye Ndiritu.",
+    keywords: "ElimuCloud legal, terms of service, privacy policy, school software compliance Kenya, data protection act Kenya, Brian Gakenye Ndiritu"
+  });
   return (
     <>
       <Navbar />

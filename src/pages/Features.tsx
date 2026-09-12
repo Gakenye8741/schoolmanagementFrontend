@@ -12,8 +12,14 @@ import { Link } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
+import { usePageSeo } from '../hooks/usePageSeo';
 
 const FeaturesPage = () => {
+  usePageSeo({
+    title: "Platform Features | ElimuCloud Multi-Tenant School ERP",
+    description: "Explore the advanced features of ElimuCloud, including multi-tenant database isolation, automated fee collection, role-based student and parent portals, and real-time exam grading. Engineered by Brian Gakenye Ndiritu.",
+    keywords: "ElimuCloud features, school ERP system modules, student portal software, automated fee collection Kenya, multi-tenant school management software, Brian Gakenye Ndiritu"
+  });
   const coreModules = [
     {
       title: "Student Admissions & Registers",

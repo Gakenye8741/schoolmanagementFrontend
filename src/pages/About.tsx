@@ -18,8 +18,14 @@ import {
 import { Link } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { Footer } from '../components/Footer';
+import { usePageSeo } from '../hooks/usePageSeo';
 
 const AboutPage = () => {
+  usePageSeo({
+    title: "About ElimuCloud | Secure Multi-Tenant Architecture & Engineering by  Gakenye Ndiritu",
+    description: "Explore the enterprise-grade technical architecture, multi-tenant database isolation, and high-performance cloud infrastructure behind ElimuCloud, conceptualized and engineered by full-stack developer  Gakenye Ndiritu.",
+    keywords: "about ElimuCloud,  Gakenye Ndiritu, full-stack software engineer Kenya, multi-tenant school ERP, PostgreSQL Drizzle ORM, React Vite architecture, educational technology platform"
+  });
   const stats = [
     { label: "Pioneer Pilot Schools", value: "15+" },
     { label: "Test Student Accounts", value: "5,000+" },
@@ -203,7 +209,7 @@ const AboutPage = () => {
                   BG
                 </div>
                 <div>
-                  <h3 className="text-2xl font-extrabold text-base-content">Brian Gakenye Ndiritu</h3>
+                  <h3 className="text-2xl font-extrabold text-base-content"> Gakenye Ndiritu</h3>
                   <p className="text-xs font-extrabold text-primary uppercase tracking-wider mt-1">Lead Software Engineer & Creator</p>
                 </div>
                 <div className="flex flex-wrap justify-center lg:justify-start gap-2 pt-2">
@@ -218,7 +224,7 @@ const AboutPage = () => {
                 </span>
                 <h4 className="text-2xl font-extrabold text-base-content">Direct Oversight of System Performance</h4>
                 <p>
-                  ElimuCloud is entirely designed, engineered, and maintained by Brian Gakenye Ndiritu. Throughout this testing phase, Brian works directly alongside school administrators to analyze server performance logs, review feedback, and deploy tailored feature upgrades.
+                  ElimuCloud is entirely designed, engineered, and maintained by  Gakenye Ndiritu. Throughout this testing phase,  works directly alongside school administrators to analyze server performance logs, review feedback, and deploy tailored feature upgrades.
                 </p>
                 <p>
                   The primary objective of this rigorous pilot period is to guarantee that when educational institutions officially onboard onto ElimuCloud, every module operates with absolute stability, lightning speed, and uncompromising reliability.

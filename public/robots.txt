@@ -1,0 +1,15 @@
+# public/robots.txt
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /features
+Allow: /pricing
+Allow: /contact
+Allow: /legal
+Allow: /login
+
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /portal/
+
+Sitemap: https://schools.gekenye-ndiritu.co.ke/sitemap.xml

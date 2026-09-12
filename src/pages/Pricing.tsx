@@ -25,8 +25,14 @@ import { Link } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { useState } from 'react';
 import { Footer } from '../components/Footer';
+import { usePageSeo } from '../hooks/usePageSeo';
 
 const PricingPage = () => {
+  usePageSeo({
+    title: "Pricing & Plans | ElimuCloud Multi-Tenant School Management Platform",
+    description: "Explore flexible, transparent subscription plans for ElimuCloud. Scalable multi-tenant school ERP packages tailored for single academies to large multi-campus institutions, engineered by  Gakenye Ndiritu.",
+    keywords: "ElimuCloud pricing, school software cost Kenya, multi-tenant school ERP pricing, student portal subscription, automated fee collection software rates"
+  });
   const [billingCycle, setBillingCycle] = useState<'term' | 'annual' | 'semester'>('term');
 
   const plans = [
