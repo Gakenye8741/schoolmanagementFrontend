@@ -1,7 +1,5 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom"
 import Home from "./pages/Home";
-import About  from "./pages/About";
-import Admission from "./pages/Admission";
 // import Register from "./pages/Login & Register/Register";
 import Login from "./pages/Login & Register/Login";
 import ProtectedRoutes from "./components/ProtectedRoutes";
@@ -17,6 +15,11 @@ import Error from "./components/Error"; // Import the error component
 import ClassManager from "./Dashboards/schooladminDashboard/classMAnager";
 import { StudentManager } from "./Dashboards/schooladminDashboard/studentMAnager";
 import { UserManager } from "./Dashboards/schooladminDashboard/usermanager";
+import FeaturesPage from "./pages/Features";
+import AboutPage from "./pages/About";
+import ContactPage from "./pages/Contact";
+import LegalHubPage from "./pages/LegalPage";
+import PricingPage from "./pages/Pricing";
 
 // Wrapper component to manage dynamic titles and render child routes via <Outlet />
 const TitleManager = () => {
@@ -35,20 +38,28 @@ const App = () => {
           element: <Home/>
         },
         {
-          path: '/About',
-          element: <About/>
+          path: '/features',
+          element: <FeaturesPage/>
         },
         {
-          path: '/Admissions',
-          element: <Admission/>
+          path: '/pricing',
+          element: <PricingPage/>
         },
         {
-          path: '/Register',
-          // element: <Register/>
+          path: '/about',
+          element: <AboutPage/>
+        },
+         {
+          path: '/contact',
+          element: <ContactPage/>
         },
         {
-          path: '/LOgin',
+          path: '/Login',
           element: <Login/>
+        },
+        {
+          path: '/legal',
+          element: <LegalHubPage />
         },
         {
           path: '/superAdmindashboard',

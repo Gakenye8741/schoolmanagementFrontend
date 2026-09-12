@@ -71,7 +71,7 @@ const Login = () => {
     <>
       <Toaster richColors position="top-right" />
       <Navbar />
-      <div className="min-h-[calc(100vh-4rem)] grid grid-cols-1 lg:grid-cols-12 bg-base-100 text-base-content">
+      <div className="min-h-screen pt-20 lg:pt-24 grid grid-cols-1 lg:grid-cols-12 bg-base-100 text-base-content">
         
         {/* Left Side: Modern Visual Banner */}
         <div className="hidden lg:flex lg:col-span-7 relative bg-gradient-to-br from-primary/90 to-primary-focus overflow-hidden items-center justify-center p-12 text-primary-content">
@@ -113,7 +113,7 @@ const Login = () => {
             
             <div className="mb-8 text-left">
               <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-base-content">
-                Sign In to ElimuHub
+                Sign In to ElimuCloud
               </h2>
               <p className="text-sm text-base-content/60 mt-1.5">
                 Enter your account details to access your dashboard.

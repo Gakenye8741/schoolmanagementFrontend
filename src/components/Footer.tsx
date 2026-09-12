@@ -1,191 +1,145 @@
-import {
-  Home as HomeIcon,
-  HelpCircle,
-  BookOpen,
-  Users,
-  Phone,
-  LogIn,
-  Sun,
-  Moon,
-  ChevronDown,
-  UserCheck,
-  User,
-  LogOut,
-  UserPlus,
+import { 
+  Mail, 
+  Phone, 
+  MapPin, 
+  Heart, 
+  Clock, 
+  ArrowRight, 
+  ChevronUp,
   GraduationCap,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
-import type { RootState } from "../App/store";
-import { clearCredentials } from "../features/Auth/AuthSlice";
+ } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export const Footer = () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <footer className="footer footer-center p-10 bg-base-300 text-base-content rounded-t-3xl mt-12 border-t border-base-300">
-      <div className="grid grid-flow-col gap-4">
-        <Link to="/" className="link link-hover">Home</Link>
-        <Link to="/About" className="link link-hover">About Us</Link>
-        <Link to="/Admissions" className="link link-hover">Admissions</Link>
-        <a className="link link-hover">Academics</a>
-        <a className="link link-hover">Contact</a>
-      </div>
-      <div>
-        <div className="grid grid-flow-col gap-4 text-2xl">
-          <span className="font-bold tracking-tight text-primary flex items-center gap-2">
-            <GraduationCap className="w-6 h-6" /> ElimuHub
-          </span>
+    <footer className="relative border-t border-base-300 bg-base-100 text-base-content pt-12 sm:pt-16 pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
+        
+        {/* Brand & About Column */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary text-primary-content flex items-center justify-center shadow-md shrink-0">
+              <GraduationCap className="w-6 h-6" />
+            </div>
+            <div>
+              <span className="text-lg sm:text-xl font-extrabold tracking-tight text-base-content block">ElimuCloud</span>
+              <span className="text-[10px] uppercase tracking-widest text-primary font-bold">Smart Institutional Suite</span>
+            </div>
+          </div>
+          <p className="text-xs sm:text-sm text-base-content/70 leading-relaxed">
+            Empowering schools and educational academies with modern administration workflows, automated financial tracking, and secure multi-tenant cloud operations.
+          </p>
         </div>
-        <p className="text-sm opacity-70 mt-2">
-          Empowering Institutions with Smart Administration across Kenya.
-        </p>
-      </div>
-      <div>
-        <p>Copyright © 2026 - All rights reserved by ElimuHub Systems</p>
-      </div>
-    </footer>
-  );
-};
 
-export const Navbar = () => {
-  const [theme, setTheme] = useState<"garden" | "dark">("garden");
-  const dispatch = useDispatch();
-  const location = useLocation();
-
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-  const role = useSelector((state: RootState) => state.auth.role);
-  const username = useSelector((state: RootState) => state.auth.user?.username);
-
-  const isActive = (path: string) => (location.pathname === path ? "text-primary font-bold" : "");
-
-  const handleLogout = () => {
-    dispatch(clearCredentials());
-  };
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "garden" ? "dark" : "garden"));
-  };
-
-  return (
-    <div className="navbar sticky top-0 z-50 bg-base-100/90 backdrop-blur text-base-content shadow-sm border-b border-base-300 transition-all px-4 lg:px-8">
-      {/* Navbar Start */}
-      <div className="navbar-start">
-        {/* Dropdown (mobile menu) */}
-        <div className="dropdown">
-          <label tabIndex={0} className="btn btn-ghost lg:hidden">
-            <svg
-              className="w-6 h-6"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 border border-base-300"
-          >
-            <li><Link to="/"><HomeIcon className="w-4 h-4" /> Home</Link></li>
-            <li><Link to="/About"><HelpCircle className="w-4 h-4" /> About</Link></li>
-            <li><Link to="/Admissions">Admissions</Link></li>
-            <li><a><BookOpen className="w-4 h-4" /> Academics</a></li>
-            <li><a><Users className="w-4 h-4" /> Faculty</a></li>
-            <li><a><Phone className="w-4 h-4" /> Contact</a></li>
-            {!isAuthenticated && (
-              <>
-                <div className="divider my-1"></div>
-                <li><Link to="/register"><UserPlus className="w-4 h-4" /> Register</Link></li>
-                <li><Link to="/login"><LogIn className="w-4 h-4" /> Login</Link></li>
-              </>
-            )}
+        {/* Quick Links Column (from router paths) */}
+        <div className="space-y-4">
+          <h4 className="font-bold text-xs uppercase tracking-wider text-primary">Quick Navigation</h4>
+          <ul className="space-y-2.5 text-xs sm:text-sm text-base-content/70 font-medium">
+            <li>
+              <Link to="/" className="hover:text-primary transition-colors flex items-center gap-1.5 py-0.5">
+                <ArrowRight size={12} className="shrink-0" /> Home Portal
+              </Link>
+            </li>
+            <li>
+              <Link to="/features" className="hover:text-primary transition-colors flex items-center gap-1.5 py-0.5">
+                <ArrowRight size={12} className="shrink-0" /> Features & Capabilities
+              </Link>
+            </li>
+            <li>
+              <Link to="/pricing" className="hover:text-primary transition-colors flex items-center gap-1.5 py-0.5">
+                <ArrowRight size={12} className="shrink-0" /> Pricing Plans
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" className="hover:text-primary transition-colors flex items-center gap-1.5 py-0.5">
+                <ArrowRight size={12} className="shrink-0" /> About Us
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="hover:text-primary transition-colors flex items-center gap-1.5 py-0.5">
+                <ArrowRight size={12} className="shrink-0" /> Contact Support
+              </Link>
+            </li>
+            <li>
+              <Link to="/legal" className="hover:text-primary transition-colors flex items-center gap-1.5 py-0.5">
+                <ArrowRight size={12} className="shrink-0" /> Legal &amp; Trust
+              </Link>
+            </li>
+            <li>
+              <Link to="/LOgin" className="hover:text-primary transition-colors flex items-center gap-1.5 py-0.5">
+                <ArrowRight size={12} className="shrink-0" /> Secure Sign In
+              </Link>
+            </li>
           </ul>
         </div>
 
-        {/* Logo / Title */}
-        <Link to="/" className="btn btn-ghost flex items-center gap-2 px-2 hover:bg-transparent">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shadow-inner">
-            <GraduationCap className="w-6 h-6" />
-          </div>
-          <div className="flex flex-col text-left">
-            <span className="text-lg font-extrabold tracking-tight leading-none text-primary">
-              ElimuHub
-            </span>
-            <span className="text-[10px] uppercase tracking-widest text-base-content/60 font-semibold mt-0.5">
-              School System
-            </span>
-          </div>
-        </Link>
-      </div>
-
-      {/* Navbar Center (desktop menu) */}
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 gap-1">
-          <li><Link to="/" className={`rounded-lg ${isActive("/")}`}><HomeIcon className="w-4 h-4" /> Home</Link></li>
-          <li><Link to="/About" className={`rounded-lg ${isActive("/About")}`}><HelpCircle className="w-4 h-4" /> About</Link></li>
-          <li><Link to="/Admissions" className={`rounded-lg ${isActive("/Admissions")}`}>Admissions</Link></li>
-          <li><a className="rounded-lg"><BookOpen className="w-4 h-4" /> Academics</a></li>
-          <li><a className="rounded-lg"><Users className="w-4 h-4" /> Faculty</a></li>
-          <li><a className="rounded-lg"><Phone className="w-4 h-4" /> Contact</a></li>
-        </ul>
-      </div>
-
-      {/* Navbar End */}
-      <div className="navbar-end gap-3">
-        {/* Theme Toggle */}
-        <button className="btn btn-ghost btn-circle" onClick={toggleTheme} aria-label="Toggle Theme">
-          {theme === "dark" ? <Moon className="w-5 h-5 text-warning" /> : <Sun className="w-5 h-5 text-warning" />}
-        </button>
-
-        {/* Auth Section */}
-        {isAuthenticated ? (
-          <div className="dropdown dropdown-end group">
-            <label tabIndex={0} className="flex items-center cursor-pointer">
-              <div className="btn btn-outline btn-primary capitalize flex items-center gap-2 rounded-xl">
-                <span className="truncate max-w-[120px]">Hey, {username || 'User'}</span>
-                <ChevronDown className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+        {/* Direct Contact Details Column */}
+        <div className="space-y-4 lg:col-span-2">
+          <h4 className="font-bold text-xs uppercase tracking-wider text-primary">Direct Contact &amp; Hours</h4>
+          <p className="text-xs sm:text-sm text-base-content/70">
+            Have questions about testing ElimuCloud in your school? Get in touch with our team directly.
+          </p>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs sm:text-sm text-base-content/80 font-medium">
+            <div className="flex items-start gap-2.5">
+              <Phone size={16} className="text-primary shrink-0 mt-0.5" />
+              <div>
+                <span className="block text-[10px] uppercase tracking-wider text-base-content/50 font-bold">Phone Support</span>
+                <a href="tel:+254789757457" className="hover:text-primary transition-colors">+254 789 757 457</a>
               </div>
-            </label>
-            <ul tabIndex={0} className="menu dropdown-content bg-base-100 shadow-xl border border-base-300 rounded-2xl w-56 p-2 mt-3 z-20">
-              <li className="menu-title px-4 py-2 text-xs uppercase opacity-70">
-                Signed in as <span className="font-bold">{role?.replace('_', ' ')}</span>
-              </li>
-              <div className="divider my-1"></div>
-              <li>
-                {['super_admin', 'school_admin'].includes(role || '') ? (
-                  <Link to="/Admindashboard/AllUsers" className="font-semibold flex items-center gap-2.5 py-2.5 rounded-xl">
-                    <UserCheck className="h-4 w-4 text-primary" /> Admin Dashboard
-                  </Link>
-                ) : (
-                  <Link to="/dashboard" className="font-semibold flex items-center gap-2.5 py-2.5 rounded-xl">
-                    <User className="h-4 w-4 text-primary" /> User Dashboard
-                  </Link>
-                )}
-              </li>
-              <div className="divider my-1"></div>
-              <li>
-                <button onClick={handleLogout} className="flex items-center gap-2.5 py-2.5 rounded-xl text-error hover:bg-error/10">
-                  <LogOut className="h-4 w-4" /> Logout
-                </button>
-              </li>
-            </ul>
+            </div>
+
+            <div className="flex items-start gap-2.5">
+              <Mail size={16} className="text-primary shrink-0 mt-0.5" />
+              <div>
+                <span className="block text-[10px] uppercase tracking-wider text-base-content/50 font-bold">Email Address</span>
+                <a href="mailto:support@elimucloud.co.ke" className="hover:text-primary transition-colors">support@elimucloud.co.ke</a>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2.5">
+              <MapPin size={16} className="text-primary shrink-0 mt-0.5" />
+              <div>
+                <span className="block text-[10px] uppercase tracking-wider text-base-content/50 font-bold">Location</span>
+                <span>Nairobi / Nyeri, Kenya</span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2.5">
+              <Clock size={16} className="text-primary shrink-0 mt-0.5" />
+              <div>
+                <span className="block text-[10px] uppercase tracking-wider text-base-content/50 font-bold">Working Hours</span>
+                <span>Mon - Sat: 8:00 AM - 6:00 PM</span>
+              </div>
+            </div>
           </div>
-        ) : (
-          <div className="hidden lg:flex gap-2 items-center">
-            <Link to="/register" className={`btn btn-ghost btn-sm font-semibold rounded-xl ${isActive("/register")}`}>
-              <UserPlus className="mr-1.5 h-4 w-4" /> Register
-            </Link>
-            <Link to="/login" className={`btn btn-primary btn-sm font-semibold rounded-xl shadow-sm ${isActive("/login")}`}>
-              <LogIn className="mr-1.5 h-4 w-4" /> Login
-            </Link>
-          </div>
-        )}
+        </div>
+
       </div>
-    </div>
+
+      {/* Bottom Copyright Strip & Scroll-to-Top */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pt-6 border-t border-base-300/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-base-content/60 text-center sm:text-left">
+        <p>&copy; {new Date().getFullYear()} ElimuCloud. All rights reserved.</p>
+        
+        <div className="flex items-center gap-4 flex-wrap justify-center">
+          <p className="flex items-center gap-1 font-medium">
+            Engineered with <Heart size={14} className="text-error fill-error shrink-0" /> for Educational Excellence
+          </p>
+          
+          <button 
+            onClick={scrollToTop}
+            className="btn btn-circle btn-sm btn-primary text-primary-content shadow-md transition-transform hover:scale-110 shrink-0"
+            title="Scroll to top"
+            aria-label="Scroll to top"
+          >
+            <ChevronUp size={16} />
+          </button>
+        </div>
+      </div>
+    </footer>
   );
 };
