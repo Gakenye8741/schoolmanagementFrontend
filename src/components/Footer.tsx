@@ -26,8 +26,8 @@ export const Footer = () => {
               <GraduationCap className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-lg sm:text-xl font-extrabold tracking-tight text-base-content block">ElimuCloud</span>
-              <span className="text-[10px] uppercase tracking-widest text-primary font-bold">Smart Institutional Suite</span>
+              <span className="text-lg sm:text-xl font-extrabold tracking-tight text-base-content block">Academiq</span>
+              <span className="text-[10px] uppercase tracking-widest text-primary font-bold">School Management System</span>
             </div>
           </div>
           <p className="text-xs sm:text-sm text-base-content/70 leading-relaxed">
@@ -46,7 +46,7 @@ export const Footer = () => {
             </li>
             <li>
               <Link to="/features" className="hover:text-primary transition-colors flex items-center gap-1.5 py-0.5">
-                <ArrowRight size={12} className="shrink-0" /> Features & Capabilities
+                <ArrowRight size={12} className="shrink-0" /> Features &amp; Capabilities
               </Link>
             </li>
             <li>
@@ -70,7 +70,7 @@ export const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link to="/LOgin" className="hover:text-primary transition-colors flex items-center gap-1.5 py-0.5">
+              <Link to="/Login" className="hover:text-primary transition-colors flex items-center gap-1.5 py-0.5">
                 <ArrowRight size={12} className="shrink-0" /> Secure Sign In
               </Link>
             </li>
@@ -81,7 +81,7 @@ export const Footer = () => {
         <div className="space-y-4 lg:col-span-2">
           <h4 className="font-bold text-xs uppercase tracking-wider text-primary">Direct Contact &amp; Hours</h4>
           <p className="text-xs sm:text-sm text-base-content/70">
-            Have questions about testing ElimuCloud in your school? Get in touch with our team directly.
+            Have questions about testing Academiq Management System in your school? Get in touch with our team directly.
           </p>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs sm:text-sm text-base-content/80 font-medium">
@@ -97,7 +97,7 @@ export const Footer = () => {
               <Mail size={16} className="text-primary shrink-0 mt-0.5" />
               <div>
                 <span className="block text-[10px] uppercase tracking-wider text-base-content/50 font-bold">Email Address</span>
-                <a href="mailto:support@elimucloud.co.ke" className="hover:text-primary transition-colors">support@elimucloud.co.ke</a>
+                <a href="mailto:support@academiq.co.ke" className="hover:text-primary transition-colors">support@academiq.co.ke</a>
               </div>
             </div>
 
@@ -123,7 +123,7 @@ export const Footer = () => {
 
       {/* Bottom Copyright Strip & Scroll-to-Top */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pt-6 border-t border-base-300/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-base-content/60 text-center sm:text-left">
-        <p>&copy; {new Date().getFullYear()} ElimuCloud. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Academiq Management System. All rights reserved.</p>
         
         <div className="flex items-center gap-4 flex-wrap justify-center">
           <p className="flex items-center gap-1 font-medium">

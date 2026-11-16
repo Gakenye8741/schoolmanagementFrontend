@@ -16,9 +16,9 @@ import { usePageSeo } from '../hooks/usePageSeo';
 
 const ContactPage = () => {
   usePageSeo({
-    title: "Contact ElimuCloud | Institutional Support & Engineering Inquiries",
-    description: "Get in touch with the ElimuCloud team for platform demonstrations, institutional onboarding, or technical support. Engineered by full-stack developer Brian Gakenye Ndiritu.",
-    keywords: "contact ElimuCloud, school software support Kenya, institutional software demo, Brian Gakenye Ndiritu, ElimuCloud helpdesk"
+    title: "Contact Academiq | Institutional Support & Engineering Inquiries",
+    description: "Get in touch with the Academiq team for platform demonstrations, institutional onboarding, or technical support. Engineered by full-stack developers Brian Gakenye Ndiritu and Brian Ireri.",
+    keywords: "contact Academiq, school software support Kenya, institutional software demo, Brian Gakenye Ndiritu, Brian Ireri, Academiq helpdesk"
   });
   const [formData, setFormData] = useState({
     schoolName: '',
@@ -69,7 +69,7 @@ const ContactPage = () => {
     {
       title: "Technical Support",
       desc: "For system configuration, role access, and portal assistance.",
-      contact: "support@elimucloud.co.ke",
+      contact: "support@academiq.co.ke",
       icon: <Mail className="w-5 h-5 text-primary" />
     },
     {
@@ -99,8 +99,6 @@ const ContactPage = () => {
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
             <div className="max-w-4xl mx-auto text-center space-y-6">
-              
-             
               
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] text-base-content">
                 Get in Touch to Join Our <span className="text-primary underline decoration-primary/30 underline-offset-8">Testing Cohort</span>
@@ -145,7 +143,7 @@ const ContactPage = () => {
                   </span>
                   <h3 className="text-2xl font-extrabold text-base-content">Contact Information</h3>
                   <p className="text-xs text-base-content/70 leading-relaxed">
-                    Have questions about testing ElimuCloud in your school? Get in touch with our team directly.
+                    Have questions about testing Academiq in your school? Get in touch with our team directly.
                   </p>
                 </div>
 
@@ -166,7 +164,7 @@ const ContactPage = () => {
                     </div>
                     <div>
                       <p className="text-xs font-bold text-base-content/50 uppercase tracking-wider">Email Address</p>
-                      <p className="text-sm font-semibold text-base-content mt-0.5">support@elimucloud.co.ke</p>
+                      <p className="text-sm font-semibold text-base-content mt-0.5">support@academiq.co.ke</p>
                     </div>
                   </div>
 
@@ -315,7 +313,7 @@ const ContactPage = () => {
                       onChange={handleChange}
                       required
                       rows={5}
-                      placeholder="Tell us about your school size (number of students) and when you would like to start testing ElimuCloud..." 
+                      placeholder="Tell us about your school size (number of students) and when you would like to start testing Academiq..." 
                       className="textarea textarea-bordered w-full rounded-xl bg-base-200/50 focus:bg-base-100 transition-colors text-sm leading-relaxed resize-none"
                     ></textarea>
                   </div>

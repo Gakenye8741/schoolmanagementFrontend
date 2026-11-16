@@ -3,12 +3,16 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
-     baseUrl: `${import.meta.env.VITE_API_URL}/api/`,
-    credentials: 'include', // CRITICAL: Ensures browser sends and receives HttpOnly cookies automatically
+    baseUrl: `${import.meta.env.VITE_API_URL}/api/`,
+    credentials: 'include',
   }),
-  tagTypes: ['Auth', 'User', 'SchoolUsers'],
+  tagTypes: ['Auth', 'User', 'Sessions'],
   endpoints: (builder) => ({
-    // 🏢 1. Register a Super Admin
+    /* ═══════════════════════════════════════════
+       BOOTSTRAP REGISTRATION (super-admin only)
+       ═══════════════════════════════════════════ */
+
+    /** POST /auth/register/super-admin — bootstrap (works once, no auth required) */
     registerSuperAdmin: builder.mutation({
       query: (superAdminPayload) => ({
         url: 'auth/register/super-admin',
@@ -17,42 +21,59 @@ export const authApi = createApi({
       }),
     }),
 
-    // 🏫 2. Register a School Admin
+    /** POST /auth/register/school-admin — requires super_admin token */
     registerSchoolAdmin: builder.mutation({
       query: (schoolAdminPayload) => ({
         url: 'auth/register/school-admin',
         method: 'POST',
         body: schoolAdminPayload,
       }),
+      invalidatesTags: ['User'],
     }),
 
-    // 👥 3-6. Register a School Member (Teacher, Student, Bursar, Parent)
-    registerSchoolMember: builder.mutation({
-      query: (memberPayload) => ({
-        url: 'auth/register/member',
-        method: 'POST',
-        body: memberPayload,
-      }),
-    }),
+    /* ═══════════════════════════════════════════
+       LOGIN / LOGOUT / SESSIONS
+       ═══════════════════════════════════════════ */
 
-    // 🔑 7. Login User
+    /** POST /auth/login */
     loginUser: builder.mutation({
       query: (loginCredentials) => ({
         url: 'auth/login',
         method: 'POST',
         body: loginCredentials,
       }),
+      invalidatesTags: ['Auth', 'User', 'Sessions'],
     }),
 
-    // 🚪 Logout User (Clears HttpOnly cookie on backend)
+    /** POST /auth/logout — clears the HttpOnly cookie */
     logoutUser: builder.mutation({
       query: () => ({
         url: 'auth/logout',
         method: 'POST',
       }),
+      invalidatesTags: ['Auth', 'User', 'Sessions'],
     }),
 
-    // ✉️ 8. Forgot Password
+    /** POST /auth/logout-all — kill every active session */
+    logoutAllSessions: builder.mutation({
+      query: () => ({
+        url: 'auth/logout-all',
+        method: 'POST',
+      }),
+      invalidatesTags: ['Auth', 'User', 'Sessions'],
+    }),
+
+    /** GET /auth/sessions — list my active sessions */
+    getMySessions: builder.query({
+      query: () => 'auth/sessions',
+      providesTags: ['Sessions'],
+    }),
+
+    /* ═══════════════════════════════════════════
+       PASSWORD MANAGEMENT
+       ═══════════════════════════════════════════ */
+
+    /** POST /auth/forgot-password */
     forgotPassword: builder.mutation({
       query: (emailPayload) => ({
         url: 'auth/forgot-password',
@@ -61,7 +82,7 @@ export const authApi = createApi({
       }),
     }),
 
-    // 🔐 9. Reset Password with Token
+    /** POST /auth/reset-password */
     resetPassword: builder.mutation({
       query: (resetPayload) => ({
         url: 'auth/reset-password',
@@ -70,75 +91,70 @@ export const authApi = createApi({
       }),
     }),
 
-    // 🔄 10. Change Password (Authenticated via Cookie)
+    /** POST /auth/change-password — authenticated via cookie */
     changePassword: builder.mutation({
       query: (passwordPayload) => ({
         url: 'auth/change-password',
         method: 'POST',
         body: passwordPayload,
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ['User', 'Sessions'],
     }),
 
-    // 🔍 11. Get User Profile by ID
-    getUserProfile: builder.query({
-      query: (userId: string) => `auth/profile/${userId}`,
+    /* ═══════════════════════════════════════════
+       PROFILE
+       ═══════════════════════════════════════════ */
+
+    /** GET /auth/profile — current user's own profile */
+    getMyProfile: builder.query({
+      query: () => 'auth/profile',
       providesTags: ['User'],
     }),
 
-    // 🔁 12. Update User Profile
+    /** GET /auth/profile/{userId} — admin viewing another user */
+    getUserProfile: builder.query({
+      query: (userId: string) => `auth/profile/${userId}`,
+      providesTags: (_r, _e, userId) => [{ type: 'User', id: userId }, 'User'],
+    }),
+
+    /** PUT /auth/profile — update current user's own profile */
+    updateMyProfile: builder.mutation({
+      query: (patch) => ({
+        url: 'auth/profile',
+        method: 'PUT',
+        body: patch,
+      }),
+      invalidatesTags: ['User'],
+    }),
+
+    /** PUT /auth/profile/{userId} — admin editing another user */
     updateUserProfile: builder.mutation({
       query: ({ userId, ...patch }) => ({
         url: `auth/profile/${userId}`,
         method: 'PUT',
         body: patch,
       }),
-      invalidatesTags: ['User', 'SchoolUsers'],
-    }),
-
-    // 👨‍👩‍👧 13. Link Parent to Student
-    linkParent: builder.mutation({
-      query: (linkPayload) => ({
-        url: 'auth/link-parent',
-        method: 'POST',
-        body: linkPayload,
-      }),
-    }),
-
-    // 📋 14. List School Users (with optional role filter)
-    getSchoolUsers: builder.query({
-      query: ({ schoolId, role }: { schoolId: string; role?: string }) => ({
-        url: `auth/schools/${schoolId}/users`,
-        params: role ? { role } : undefined,
-      }),
-      providesTags: ['SchoolUsers'],
-    }),
-
-    // ⚡ 15. Toggle User Status (Activate / Deactivate)
-    toggleUserStatus: builder.mutation({
-      query: ({ userId, isActive }: { userId: string; isActive: boolean }) => ({
-        url: `auth/users/${userId}/status`,
-        method: 'PATCH',
-        body: { isActive },
-      }),
-      invalidatesTags: ['User', 'SchoolUsers'],
+      invalidatesTags: (_r, _e, { userId }) => [{ type: 'User', id: userId }, 'User'],
     }),
   }),
 });
 
-// ✅ Export Hooks
+/* ═══════════════════════════════════════════════════════════════
+   HOOKS EXPORT
+   ═══════════════════════════════════════════════════════════════ */
+
 export const {
   useRegisterSuperAdminMutation,
   useRegisterSchoolAdminMutation,
-  useRegisterSchoolMemberMutation,
   useLoginUserMutation,
   useLogoutUserMutation,
+  useLogoutAllSessionsMutation,
+  useGetMySessionsQuery,
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useChangePasswordMutation,
+  useGetMyProfileQuery,
   useGetUserProfileQuery,
+  useUpdateMyProfileMutation,
   useUpdateUserProfileMutation,
-  useLinkParentMutation,
-  useGetSchoolUsersQuery,
-  useToggleUserStatusMutation,
 } = authApi;

@@ -1,4 +1,127 @@
+/* src/index.css or app.css */
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, garden;
+  themes: light --default, dark;
+}
+
+/* ☀️ LIGHT — soft & bright, blue + sky + extended palette */
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  /* Base */
+  --color-base-100: #ffffff;
+  --color-base-200: #f8fafc;
+  --color-base-300: #e2e8f0;
+  --color-base-content: #0f172a;
+
+  /* Core brand */
+  --color-primary: #2563eb;
+  --color-primary-content: #ffffff;
+  --color-secondary: #0ea5e9;
+  --color-secondary-content: #ffffff;
+  --color-accent: #38bdf8;
+  --color-accent-content: #0c4a6e;
+  --color-neutral: #1e293b;
+  --color-neutral-content: #f8fafc;
+
+  /* Status */
+  --color-info: #0ea5e9;
+  --color-info-content: #ffffff;
+  --color-success: #16a34a;
+  --color-success-content: #ffffff;
+  --color-warning: #f59e0b;
+  --color-warning-content: #1c1917;
+  --color-error: #dc2626;
+  --color-error-content: #ffffff;
+
+  /* 🌈 Extended palette — LIGHT */
+  --color-ocean: #0369a1;
+  --color-ocean-content: #ffffff;
+  --color-aqua: #06b6d4;
+  --color-aqua-content: #ffffff;
+  --color-mint: #10b981;
+  --color-mint-content: #ffffff;
+  --color-coral: #fb7185;
+  --color-coral-content: #ffffff;
+  --color-rose: #e11d48;
+  --color-rose-content: #ffffff;
+  --color-violet: #8b5cf6;
+  --color-violet-content: #ffffff;
+  --color-indigo: #6366f1;
+  --color-indigo-content: #ffffff;
+  --color-amber: #f59e0b;
+  --color-amber-content: #1c1917;
+  --color-sand: #e7d3b4;
+  --color-sand-content: #3f2f1a;
+  --color-slate: #64748b;
+  --color-slate-content: #ffffff;
+
+  /* Shape */
+  --radius-selector: 1rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1rem;
+}
+
+/* 🌙 DARK — deep navy ink, blue + sky + extended palette */
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: false;
+  prefersdark: false;
+  color-scheme: dark;
+
+  /* Base */
+  --color-base-100: #0f172a;
+  --color-base-200: #1e293b;
+  --color-base-300: #334155;
+  --color-base-content: #f1f5f9;
+
+  /* Core brand */
+  --color-primary: #3b82f6;
+  --color-primary-content: #ffffff;
+  --color-secondary: #38bdf8;
+  --color-secondary-content: #082f49;
+  --color-accent: #0ea5e9;
+  --color-accent-content: #ffffff;
+  --color-neutral: #1e293b;
+  --color-neutral-content: #f1f5f9;
+
+  /* Status */
+  --color-info: #38bdf8;
+  --color-info-content: #082f49;
+  --color-success: #22c55e;
+  --color-success-content: #052e16;
+  --color-warning: #fbbf24;
+  --color-warning-content: #451a03;
+  --color-error: #f87171;
+  --color-error-content: #450a0a;
+
+  /* 🌈 Extended palette — DARK (lighter for contrast) */
+  --color-ocean: #38bdf8;
+  --color-ocean-content: #082f49;
+  --color-aqua: #22d3ee;
+  --color-aqua-content: #083344;
+  --color-mint: #34d399;
+  --color-mint-content: #022c22;
+  --color-coral: #fda4af;
+  --color-coral-content: #4c0519;
+  --color-rose: #fb7185;
+  --color-rose-content: #4c0519;
+  --color-violet: #a78bfa;
+  --color-violet-content: #2e1065;
+  --color-indigo: #818cf8;
+  --color-indigo-content: #1e1b4b;
+  --color-amber: #fbbf24;
+  --color-amber-content: #451a03;
+  --color-sand: #d6c1a1;
+  --color-sand-content: #2b1e10;
+  --color-slate: #94a3b8;
+  --color-slate-content: #0f172a;
+
+  /* Shape */
+  --radius-selector: 1rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1rem;
 }

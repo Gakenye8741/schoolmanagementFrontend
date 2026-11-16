@@ -15,20 +15,41 @@ import { FaJetFighter, FaYammer } from "react-icons/fa6";
 import type { RootState } from "../../App/store";
 import { useGetSchoolByIdQuery } from "../../features/Apis/School.Api";
 
-const navItems = [
-  { name: "Manage Users", path: "AllUsers", icon: <User className="text-current transition-transform duration-300 group-hover:scale-110" /> },
-  { name: "Manage School Admins", path: "schoolAdmins", icon: <FaChalkboardTeacher className="text-current transition-transform duration-300 group-hover:scale-110" /> },
-  { name: "Manage Parents", path: "AllParents", icon: <FaJetFighter className="text-current transition-transform duration-300 group-hover:scale-110" /> },
-  { name: "Manage Classes", path: "AllClasses", icon: <School2 className="text-current transition-transform duration-300 group-hover:scale-110" /> },
-  { name: "Manage ClassTeachers", path: "AllClassesTeachers", icon: <FaPumpMedical className="text-current transition-transform duration-300 group-hover:scale-110" /> },
-  { name: "Manage Years", path: "AllYears", icon: <FaYammer className="text-current transition-transform duration-300 group-hover:scale-110" /> }, 
-  { name: "Manage Terms", path: "AllTerms", icon: <Calendar1Icon className="text-current transition-transform duration-300 group-hover:scale-110" /> },
-  { name: "Manage Students", path: "AllStudents", icon: <GraduationCap className="text-current transition-transform duration-300 group-hover:scale-110" /> },
-  { name: "Manage Subjects", path: "AllSubjects", icon: <Book className="text-current transition-transform duration-300 group-hover:scale-110" /> },
-  { name: "Manage StudentSubjects", path: "AllStudentSubjects", icon: <Book className="text-current transition-transform duration-300 group-hover:scale-110" /> },
-  { name: "Manage Exams", path: "AllExams", icon: <TestTube className="text-current transition-transform duration-300 group-hover:scale-110" /> },  
-  { name: "Manage Grades", path: "AllGrades", icon: <TestTube className="text-current transition-transform duration-300 group-hover:scale-110" /> }, 
-  { name: "Logout", path: "logout", icon: <LogOut className="text-rose-500 transition-transform duration-300 group-hover:scale-110" /> },
+/* ── Grouped nav sections ── */
+const navGroups = [
+  {
+    title: "Institution",
+    items: [
+      
+      { name: "Manage Schools",  path: "schools",     icon: User },
+      { name: "School Admins",   path: "schoolAdmins", icon: FaChalkboardTeacher },
+      { name: "Manage Users",    path: "users",       icon: FaJetFighter },
+    ],
+  },
+  {
+    title: "Academics",
+    items: [
+      { name: "Classes",         path: "AllClasses",        icon: School2 },
+      { name: "Class Teachers",  path: "AllClassesTeachers", icon: FaPumpMedical },
+      { name: "Years",           path: "AllYears",          icon: FaYammer },
+      { name: "Terms",           path: "AllTerms",          icon: Calendar1Icon },
+    ],
+  },
+  {
+    title: "People",
+    items: [
+      { name: "Students",        path: "AllStudents",        icon: GraduationCap },
+      { name: "Subjects",        path: "AllSubjects",        icon: Book },
+      { name: "Student Subjects", path: "AllStudentSubjects", icon: Book },
+    ],
+  },
+  {
+    title: "Assessment",
+    items: [
+      { name: "Exams",           path: "AllExams",  icon: TestTube },
+      { name: "Grades",          path: "AllGrades", icon: TestTube },
+    ],
+  },
 ];
 
 export const AdminSideNav = ({ 
@@ -55,88 +76,96 @@ export const AdminSideNav = ({
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-base-200/95 backdrop-blur-md pt-0 px-3 pb-0 overflow-hidden">
-      <div
-        className={`
-          flex flex-col
-          h-full
-          w-full
-          bg-base-200 text-base-content
-          p-2.5 rounded-2xl shadow-inner border border-base-300/60
-          overflow-y-auto
-          custom-scrollbar
-        `}
-      >
-        {/* Header / Brand Badge */}
-        <div className={`mb-3 pb-2.5 border-b border-base-300/50 flex items-center ${isCollapsed ? "justify-center" : "justify-center px-1"} shrink-0 overflow-hidden`}>
-          {isCollapsed ? (
-            <div 
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md font-bold text-base"
-              style={{ backgroundColor: primaryColor }}
-              title="Admin Panel"
-            >
-              👑
-            </div>
-          ) : (
-            <div className="w-full text-center space-y-1">
-              <h4 className="flex items-center justify-center text-sm md:text-base font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r drop-shadow-sm whitespace-nowrap" style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, ${secondaryColor})` }}>
-                <span className="mr-1.5 text-xs animate-pulse">🛠️</span>
-                Admin Portal
-                <span className="ml-1.5 text-xs">👑</span>
-              </h4>
-              <p className="text-[10px] uppercase font-bold tracking-widest text-base-content/50 truncate">
-                {school?.name || 'Management Hub'}
+    // ✅ FIX: min-h-full (not h-full) + no overflow-hidden → grows with content and lets parent scroll
+    <div className="flex flex-col min-h-full w-full">
+      <nav className="flex flex-col flex-1 py-1">
+        {navGroups.map((group, gIdx) => (
+          <div key={group.title} className="mb-3 last:mb-0">
+            {!isCollapsed && (
+              <p className="text-[10px] uppercase tracking-widest font-black text-base-content/40 px-3 py-1.5 mb-1">
+                {group.title}
               </p>
-            </div>
-          )}
-        </div>
+            )}
 
-        {/* Nav Links Container */}
-        <nav className="flex flex-col space-y-1.5 flex-1">
-          {navItems.map((item, index) =>
-            item.name === "Logout" ? (
-              <button
-                key={index}
-                onClick={handleLogout}
-                className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-rose-500/10 hover:text-rose-500 transition-all duration-200 w-full text-left font-medium text-xs sm:text-sm ${
-                  isCollapsed ? "justify-center px-0 py-3" : ""
-                }`}
-                aria-label="Logout"
-                title={isCollapsed ? item.name : undefined}
-              >
-                <span className="shrink-0 text-base">{item.icon}</span>
-                {!isCollapsed && <span className="font-chewy tracking-wide truncate">{item.name}</span>}
-              </button>
-            ) : (
-              <NavLink
-                key={index}
-                to={item.path}
-                end
-                onClick={onNavItemClick}
-                className={({ isActive }) =>
-                  `group relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 font-medium text-xs sm:text-sm ${
-                    isCollapsed ? "justify-center px-0 py-3" : ""
-                  } ${
-                    isActive 
-                      ? "shadow-sm font-bold text-white translate-x-1" 
-                      : "hover:bg-base-300/80 text-base-content/80 hover:text-base-content"
-                  }`
-                }
-                style={({ isActive }) => 
-                  isActive 
-                    ? { backgroundColor: primaryColor, boxShadow: `0 3px 10px ${primaryColor}40` } 
-                    : {}
-                }
-                aria-label={`Go to ${item.name}`}
-                title={isCollapsed ? item.name : undefined}
-              >
-                <span className="shrink-0 text-base">{item.icon}</span>
-                {!isCollapsed && <span className="font-chewy tracking-wide truncate">{item.name}</span>}
-              </NavLink>
-            )
+            {isCollapsed && gIdx > 0 && (
+              <div className="h-px bg-base-300/60 mx-2 my-2" />
+            )}
+
+            <div className="space-y-0.5">
+              {group.items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    end
+                    onClick={onNavItemClick}
+                    className={({ isActive }) =>
+                      `group relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 font-medium text-sm ${
+                        isCollapsed ? "justify-center px-0 py-3" : ""
+                      } ${
+                        isActive 
+                          ? "text-white shadow-md" 
+                          : "text-base-content/70 hover:bg-base-300/70 hover:text-base-content"
+                      }`
+                    }
+                    style={({ isActive }) => 
+                      isActive 
+                        ? { 
+                            backgroundColor: primaryColor, 
+                            boxShadow: `0 3px 12px ${primaryColor}40` 
+                          } 
+                        : {}
+                    }
+                    aria-label={item.name}
+                    title={isCollapsed ? item.name : undefined}
+                  >
+                    {({ isActive }) => (
+                      <>
+                        <Icon 
+                          className={`shrink-0 text-base transition-transform duration-300 ${
+                            isCollapsed ? "" : "group-hover:scale-110"
+                          }`}
+                          size={18}
+                        />
+                        {!isCollapsed && (
+                          <span className="truncate tracking-wide">{item.name}</span>
+                        )}
+                        {isActive && !isCollapsed && (
+                          <span 
+                            className="ml-auto w-1.5 h-1.5 rounded-full bg-white/90 shadow-sm"
+                          />
+                        )}
+                      </>
+                    )}
+                  </NavLink>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+
+        {/* ── Logout pinned to bottom ── */}
+        <div className="mt-auto pt-3">
+          {!isCollapsed && (
+            <div className="h-px bg-base-300/60 mx-2 mb-2" />
           )}
-        </nav>
-      </div>
+          <button
+            onClick={handleLogout}
+            className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-rose-500/10 hover:text-rose-500 transition-all duration-200 w-full text-left font-medium text-sm ${
+              isCollapsed ? "justify-center px-0 py-3" : ""
+            }`}
+            aria-label="Logout"
+            title={isCollapsed ? "Logout" : undefined}
+          >
+            <LogOut 
+              size={18}
+              className="shrink-0 text-rose-500 transition-transform duration-300 group-hover:scale-110 group-hover:-translate-x-0.5" 
+            />
+            {!isCollapsed && <span className="truncate">Logout</span>}
+          </button>
+        </div>
+      </nav>
     </div>
   );
 };

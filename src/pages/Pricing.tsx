@@ -11,7 +11,7 @@ import {
   Layers,
   Clock,
   Plus,
-   BookOpen,
+  BookOpen,
   Users,
   Award,
   CheckCircle2,
@@ -29,9 +29,9 @@ import { usePageSeo } from '../hooks/usePageSeo';
 
 const PricingPage = () => {
   usePageSeo({
-    title: "Pricing & Plans | ElimuCloud Multi-Tenant School Management Platform",
-    description: "Explore flexible, transparent subscription plans for ElimuCloud. Scalable multi-tenant school ERP packages tailored for single academies to large multi-campus institutions, engineered by  Gakenye Ndiritu.",
-    keywords: "ElimuCloud pricing, school software cost Kenya, multi-tenant school ERP pricing, student portal subscription, automated fee collection software rates"
+    title: "Pricing & Plans | Academiq Multi-Tenant School Management Platform",
+    description: "Explore flexible, transparent subscription plans for Academiq. Scalable multi-tenant school ERP packages tailored for single academies to large multi-campus institutions, engineered by Gakenye Ndiritu.",
+    keywords: "Academiq pricing, school software cost Kenya, multi-tenant school ERP pricing, student portal subscription, automated fee collection software rates"
   });
   const [billingCycle, setBillingCycle] = useState<'term' | 'annual' | 'semester'>('term');
 
@@ -114,19 +114,22 @@ const PricingPage = () => {
       title: "SMS Parent Notification Bundle",
       description: "Direct gateway integration to send automated fee balances, meeting notices, and exam results straight to parents via SMS.",
       price: "KES 3,500 / term",
-      badge: "Communication"
+      badge: "Communication",
+      image: "https://images.unsplash.com/photo-1611606063065-ee7946f0787a?auto=format&fit=crop&w=600&q=80",
     },
     {
       title: "Advanced Data Migration Service",
-      description: "Let our tech team safely move your old records from Excel sheets or paper books into ElimuCloud without any data loss.",
+      description: "Let our tech team safely move your old records from Excel sheets or paper books into Academiq without any data loss.",
       price: "KES 5,000 (One-off)",
-      badge: "Onboarding"
+      badge: "Onboarding",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
     },
     {
       title: "Custom Domain Branding",
       description: "Run your portal on your own school web address (e.g., portal.yourschool.ac.ke) with a secure SSL certificate.",
       price: "KES 6,000 / year",
-      badge: "Branding"
+      badge: "Branding",
+      image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=600&q=80",
     }
   ];
 
@@ -154,36 +157,74 @@ const PricingPage = () => {
       <Toaster richColors position="top-right" />
       <Navbar />
       
-      <div className="min-h-screen bg-base-100 text-base-content flex flex-col font-sans selection:bg-primary selection:text-primary-content animate-fadeIn">
+      <div className="min-h-screen bg-base-100 text-base-content flex flex-col font-sans selection:bg-primary selection:text-primary-content animate-fadeIn overflow-x-hidden">
         
-        {/* Hero Section */}
+        {/* ═══════════════════════════════════════════════
+            HERO — with image
+            ═══════════════════════════════════════════════ */}
         <section className="relative pt-28 pb-12 lg:pt-36 lg:pb-16 overflow-hidden bg-gradient-to-b from-base-200/60 via-base-100 to-base-100">
-          {/* Background Decorative Gradients */}
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
           <div className="absolute top-10 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl pointer-events-none"></div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
               
-              {/* Hero Content */}
-              <div className="lg:col-span-12 lg:text-center space-y-5 max-w-4xl mx-auto">
-                
-                
+              {/* Left — text content */}
+              <div className="lg:col-span-7 space-y-5 text-center lg:text-left">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 text-primary px-3 py-1 mx-auto lg:mx-0">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span className="text-[11px] font-extrabold uppercase tracking-widest">
+                    Academiq Pricing
+                  </span>
+                </div>
+
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] text-base-content">
-                  Our Packages, <span className="text-primary underline decoration-primary/30 underline-offset-8">Free During Testing</span>
+                  Our Packages,{" "}
+                  <span className="text-primary underline decoration-primary/30 underline-offset-8">
+                    Free During Testing
+                  </span>
                 </h1>
                 
-                <p className="text-base sm:text-lg text-base-content/70 leading-relaxed max-w-2xl mx-auto font-medium">
+                <p className="text-base sm:text-lg text-base-content/70 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
                   Check out our packages below. Everything is completely free right now while we test the system with schools.
                 </p>
+              </div>
 
+              {/* Right — hero image */}
+              <div className="lg:col-span-5 relative">
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-base-300 group">
+                  <img
+                    src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=900&q=80"
+                    alt="Modern school campus building"
+                    className="w-full h-64 sm:h-80 object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 flex items-center gap-2 text-white">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-[11px] font-bold uppercase tracking-widest drop-shadow-md">
+                      Free Pilot Access · No Card Required
+                    </span>
+                  </div>
+                </div>
+
+                {/* Floating badge */}
+                <div className="absolute -top-4 -left-4 bg-base-100 rounded-2xl shadow-xl border border-base-300 px-4 py-3 flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-600 flex items-center justify-center">
+                    <CheckCircle2 className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-extrabold text-base-content">100% Free</p>
+                    <p className="text-[10px] text-base-content/60">During Pilot</p>
+                  </div>
+                </div>
               </div>
 
             </div>
           </div>
         </section>
 
-        {/* Detailed System Overview / Value Strip */}
+        {/* ── Value strip ── */}
         <section className="py-10 bg-base-100 border-b border-base-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
@@ -222,7 +263,7 @@ const PricingPage = () => {
           </div>
         </section>
 
-        {/* Pricing Cards Grid Section with Billing Cycle Toggle Placed Directly Above */}
+        {/* ── Pricing cards ── */}
         <section className="py-16 bg-base-200/40 border-y border-base-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
             
@@ -237,7 +278,6 @@ const PricingPage = () => {
                 Select the ideal capacity for your campus. Everything is completely free right now during our system testing phase.
               </p>
 
-              {/* Billing Cycle Multi-Toggle placed right above the plans */}
               <div className="pt-2 flex flex-wrap justify-center items-center gap-2 sm:gap-3 bg-base-100 backdrop-blur-md p-2 rounded-2xl max-w-md mx-auto border border-base-300 shadow-sm">
                 <button
                   onClick={() => setBillingCycle('term')}
@@ -287,7 +327,6 @@ const PricingPage = () => {
                       : 'border-base-300'
                   }`}
                 >
-                  {/* Subtle top border illumination on hover */}
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
 
                   {plan.popular && (
@@ -357,7 +396,7 @@ const PricingPage = () => {
           </div>
         </section>
 
-        {/* Detailed Package Breakdown & Feature Matrix */}
+        {/* ── Detailed breakdown (now with images) ── */}
         <section className="py-20 bg-base-100 border-b border-base-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
             
@@ -375,112 +414,160 @@ const PricingPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               
-              {/* Starter Details */}
-              <div className="bg-base-200/40 p-8 rounded-3xl border border-base-300 space-y-6">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold">
-                  <School className="w-6 h-6" />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-extrabold">Starter School Breakdown</h3>
-                  <p className="text-xs text-base-content/70 leading-relaxed">
-                    Designed specifically to replace scattered registers and traditional paperwork with a clean cloud database.
-                  </p>
-                </div>
-                <div className="space-y-4 pt-4 border-t border-base-300/60">
-                  <div className="flex items-start gap-3">
-                    <UserCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold">Admission & Records</h4>
-                      <p className="text-xs text-base-content/60 mt-0.5">Manage up to 250 student profiles, parent contacts, and admission numbers effortlessly.</p>
-                    </div>
+              {/* Starter — with image */}
+              <div className="bg-base-200/40 rounded-3xl border border-base-300 overflow-hidden flex flex-col group hover:shadow-xl transition-all duration-300">
+                <div className="relative h-40 overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80"
+                    alt="Small primary school classroom"
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  <div className="absolute bottom-3 left-4 flex items-center gap-2 text-white">
+                    <School className="w-4 h-4" />
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest">Starter Tier</span>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <DollarSign className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold">Basic Fee Collection</h4>
-                      <p className="text-xs text-base-content/60 mt-0.5">Track student fee balances and generate printable cash or bank-slip receipts instantly.</p>
-                    </div>
+                </div>
+
+                <div className="p-8 space-y-6">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+                    <School className="w-6 h-6" />
                   </div>
-                  <div className="flex items-start gap-3">
-                    <FileText className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold">Teacher Grading Portal</h4>
-                      <p className="text-xs text-base-content/60 mt-0.5">Teachers can log in, input termly exam scores, and compile neat report cards.</p>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-extrabold">Starter School Breakdown</h3>
+                    <p className="text-xs text-base-content/70 leading-relaxed">
+                      Designed specifically to replace scattered registers and traditional paperwork with a clean cloud database.
+                    </p>
+                  </div>
+                  <div className="space-y-4 pt-4 border-t border-base-300/60">
+                    <div className="flex items-start gap-3">
+                      <UserCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-bold">Admission & Records</h4>
+                        <p className="text-xs text-base-content/60 mt-0.5">Manage up to 250 student profiles, parent contacts, and admission numbers effortlessly.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <DollarSign className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-bold">Basic Fee Collection</h4>
+                        <p className="text-xs text-base-content/60 mt-0.5">Track student fee balances and generate printable cash or bank-slip receipts instantly.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <FileText className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-bold">Teacher Grading Portal</h4>
+                        <p className="text-xs text-base-content/60 mt-0.5">Teachers can log in, input termly exam scores, and compile neat report cards.</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Professional Details */}
-              <div className="bg-base-200/40 p-8 rounded-3xl border-2 border-primary/50 shadow-lg space-y-6 relative overflow-hidden">
-                <div className="absolute top-0 right-0 bg-primary/10 text-primary text-[10px] font-extrabold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
-                  Full Suite
-                </div>
-                <div className="w-12 h-12 rounded-2xl bg-primary text-primary-content flex items-center justify-center font-bold shadow-md">
-                  <Zap className="w-6 h-6" />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-extrabold">Professional Cloud Breakdown</h3>
-                  <p className="text-xs text-base-content/70 leading-relaxed">
-                    Our flagship setup equipped with automated parent communication and advanced financial workflows.
-                  </p>
-                </div>
-                <div className="space-y-4 pt-4 border-t border-base-300/60">
-                  <div className="flex items-start gap-3">
-                    <BellRing className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold">Automated Parent Alerts</h4>
-                      <p className="text-xs text-base-content/60 mt-0.5">Instantly dispatch fee balance reminders, urgent school announcements, and exam notices.</p>
-                    </div>
+              {/* Professional — with image */}
+              <div className="bg-base-200/40 rounded-3xl border-2 border-primary/50 shadow-lg overflow-hidden flex flex-col relative group hover:shadow-2xl transition-all duration-300">
+                <div className="relative h-40 overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80"
+                    alt="Modern classroom collaboration"
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  <div className="absolute top-0 right-0 bg-primary text-primary-content text-[10px] font-extrabold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
+                    Full Suite
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Calendar className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold">Timetable & Discipline</h4>
-                      <p className="text-xs text-base-content/60 mt-0.5">Organize master school schedules and maintain digital incident tracking logs securely.</p>
-                    </div>
+                  <div className="absolute bottom-3 left-4 flex items-center gap-2 text-white">
+                    <Zap className="w-4 h-4" />
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest">Professional Tier</span>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Users className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold">Triple Portal Access</h4>
-                      <p className="text-xs text-base-content/60 mt-0.5">Separate custom dashboards built specifically for Administrators, Teachers, and Parents.</p>
+                </div>
+
+                <div className="p-8 space-y-6">
+                  <div className="w-12 h-12 rounded-2xl bg-primary text-primary-content flex items-center justify-center font-bold shadow-md">
+                    <Zap className="w-6 h-6" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-extrabold">Professional Cloud Breakdown</h3>
+                    <p className="text-xs text-base-content/70 leading-relaxed">
+                      Our flagship setup equipped with automated parent communication and advanced financial workflows.
+                    </p>
+                  </div>
+                  <div className="space-y-4 pt-4 border-t border-base-300/60">
+                    <div className="flex items-start gap-3">
+                      <BellRing className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-bold">Automated Parent Alerts</h4>
+                        <p className="text-xs text-base-content/60 mt-0.5">Instantly dispatch fee balance reminders, urgent school announcements, and exam notices.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <Calendar className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-bold">Timetable & Discipline</h4>
+                        <p className="text-xs text-base-content/60 mt-0.5">Organize master school schedules and maintain digital incident tracking logs securely.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <Users className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-bold">Triple Portal Access</h4>
+                        <p className="text-xs text-base-content/60 mt-0.5">Separate custom dashboards built specifically for Administrators, Teachers, and Parents.</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Enterprise Details */}
-              <div className="bg-base-200/40 p-8 rounded-3xl border border-base-300 space-y-6">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold">
-                  <Building2 className="w-6 h-6" />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-extrabold">Enterprise Institution Breakdown</h3>
-                  <p className="text-xs text-base-content/70 leading-relaxed">
-                    Engineered for large boarding schools and multi-branch educational networks requiring custom controls.
-                  </p>
-                </div>
-                <div className="space-y-4 pt-4 border-t border-base-300/60">
-                  <div className="flex items-start gap-3">
-                    <Building2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold">Multi-Campus Control</h4>
-                      <p className="text-xs text-base-content/60 mt-0.5">Oversee multiple branches or distinct school sections under a single unified master admin login.</p>
-                    </div>
+              {/* Enterprise — with image */}
+              <div className="bg-base-200/40 rounded-3xl border border-base-300 overflow-hidden flex flex-col group hover:shadow-xl transition-all duration-300">
+                <div className="relative h-40 overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=80"
+                    alt="Large campus building"
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  <div className="absolute bottom-3 left-4 flex items-center gap-2 text-white">
+                    <Building2 className="w-4 h-4" />
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest">Enterprise Tier</span>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold">Custom Domain & Branding</h4>
-                      <p className="text-xs text-base-content/60 mt-0.5">Run your software on your own custom web address with dedicated institutional color themes.</p>
-                    </div>
+                </div>
+
+                <div className="p-8 space-y-6">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+                    <Building2 className="w-6 h-6" />
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Award className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold">Dedicated Support & Setup</h4>
-                      <p className="text-xs text-base-content/60 mt-0.5">Assigned account manager, on-site staff training sessions, and priority custom feature integrations.</p>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-extrabold">Enterprise Institution Breakdown</h3>
+                    <p className="text-xs text-base-content/70 leading-relaxed">
+                      Engineered for large boarding schools and multi-branch educational networks requiring custom controls.
+                    </p>
+                  </div>
+                  <div className="space-y-4 pt-4 border-t border-base-300/60">
+                    <div className="flex items-start gap-3">
+                      <Building2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-bold">Multi-Campus Control</h4>
+                        <p className="text-xs text-base-content/60 mt-0.5">Oversee multiple branches or distinct school sections under a single unified master admin login.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-bold">Custom Domain & Branding</h4>
+                        <p className="text-xs text-base-content/60 mt-0.5">Run your software on your own custom web address with dedicated institutional color themes.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <Award className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-bold">Dedicated Support & Setup</h4>
+                        <p className="text-xs text-base-content/60 mt-0.5">Assigned account manager, on-site staff training sessions, and priority custom feature integrations.</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -491,7 +578,7 @@ const PricingPage = () => {
           </div>
         </section>
 
-        {/* Optional Add-on Packages Grid Section */}
+        {/* ── Add-ons — with images ── */}
         <section className="py-20 bg-base-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
             
@@ -511,35 +598,44 @@ const PricingPage = () => {
               {addOns.map((addon, aIndex) => (
                 <div 
                   key={aIndex} 
-                  className="bg-base-200/50 p-8 rounded-3xl shadow-xl border border-base-300 flex flex-col justify-between hover:shadow-2xl transition-all group"
+                  className="bg-base-200/50 rounded-3xl shadow-xl border border-base-300 flex flex-col justify-between hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden"
                 >
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-primary/10 text-primary uppercase tracking-wider">
-                        {addon.badge}
-                      </span>
-                      <div className="w-8 h-8 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold group-hover:bg-primary group-hover:text-primary-content transition-colors">
-                        <Plus className="w-4 h-4" />
-                      </div>
+                  {/* Small image header */}
+                  <div className="relative h-32 overflow-hidden">
+                    <img
+                      src={addon.image}
+                      alt={addon.title}
+                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    <span className="absolute top-3 left-3 text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-base-100/95 backdrop-blur-md text-primary uppercase tracking-wider shadow-sm">
+                      {addon.badge}
+                    </span>
+                    <div className="absolute bottom-3 right-3 w-8 h-8 rounded-2xl bg-base-100/95 backdrop-blur-md text-primary flex items-center justify-center font-bold shadow-sm">
+                      <Plus className="w-4 h-4" />
                     </div>
-                    
-                    <h3 className="text-xl font-extrabold">
-                      {addon.title}
-                    </h3>
-                    
-                    <p className="text-xs sm:text-sm text-base-content/70 leading-relaxed">
-                      {addon.description}
-                    </p>
                   </div>
 
-                  <div className="pt-6 mt-6 border-t border-base-300/60 flex items-center justify-between">
-                    <div>
-                      <span className="text-[11px] text-base-content/50 line-through block">{addon.price}</span>
-                      <span className="text-xs font-extrabold text-emerald-600">Free in Pilot</span>
+                  <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <h3 className="text-lg font-extrabold">
+                        {addon.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-base-content/70 leading-relaxed">
+                        {addon.description}
+                      </p>
                     </div>
-                    <Link to="/contact" className="text-xs font-bold hover:underline flex items-center gap-1 text-primary">
-                      Contact Us <ArrowRight className="w-3 h-3" />
-                    </Link>
+
+                    <div className="pt-5 mt-5 border-t border-base-300/60 flex items-center justify-between">
+                      <div>
+                        <span className="text-[11px] text-base-content/50 line-through block">{addon.price}</span>
+                        <span className="text-xs font-extrabold text-emerald-600">Free in Pilot</span>
+                      </div>
+                      <Link to="/contact" className="text-xs font-bold hover:underline flex items-center gap-1 text-primary">
+                        Contact Us <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -548,7 +644,7 @@ const PricingPage = () => {
           </div>
         </section>
 
-        {/* Security & Trust Banner Section */}
+        {/* ── Security & trust ── */}
         <section className="py-16 bg-base-200/40 border-y border-base-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
             <div className="bg-base-100 border border-base-300 rounded-3xl p-8 sm:p-12 shadow-xl grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center md:text-left">
@@ -585,7 +681,7 @@ const PricingPage = () => {
           </div>
         </section>
 
-        {/* Frequently Asked Questions Section */}
+        {/* ── FAQ ── */}
         <section className="py-20 bg-base-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12">
             
@@ -620,12 +716,11 @@ const PricingPage = () => {
           </div>
         </section>
 
-        {/* Call to Action Banner */}
+        {/* ── CTA ── */}
         <section className="py-20 bg-base-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
             <div className="bg-gradient-to-br from-primary/90 to-primary-focus rounded-3xl p-8 sm:p-12 lg:p-16 text-primary-content shadow-2xl relative overflow-hidden text-center lg:text-left flex flex-col lg:flex-row items-center justify-between gap-8">
               
-              {/* Background blur effects */}
               <div className="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-white/10 blur-3xl pointer-events-none"></div>
               <div className="absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-black/10 blur-3xl pointer-events-none"></div>
 

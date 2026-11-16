@@ -6,6 +6,7 @@ import {
   useUpdateClassTeacherMutation, 
   useDeleteClassMutation 
 } from '../../features/Apis/Class.Api';
+
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../App/store';
 import { 
@@ -21,6 +22,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import { useGetSchoolByIdQuery } from '../../features/Apis/School.Api';
+import { useGetTeachersBySchoolQuery } from '../../features/Apis/Users.Api';
 
 export default function ClassManager() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -46,6 +48,14 @@ export default function ClassManager() {
     skip: !currentSchoolId,
     refetchOnMountOrArgChange: true,
   });
+
+  const { data: teachersData } = useGetTeachersBySchoolQuery(currentSchoolId, {
+    skip: !currentSchoolId,
+  });
+
+  const teachersList = Array.isArray(teachersData) 
+    ? teachersData 
+    : (teachersData?.data || teachersData?.users || teachersData?.teachers || []);
 
   const [createClass, { isLoading: isCreatingClass }] = useCreateClassMutation();
   const [updateClass, { isLoading: isUpdatingClass }] = useUpdateClassMutation();
@@ -153,7 +163,7 @@ export default function ClassManager() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 bg-base-100 text-base-content min-h-screen">
       
       {/* Top Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-primary/15 via-base-200 to-secondary/15 p-8 sm:p-10 rounded-3xl border border-base-300 shadow-sm">
+      <div className="relative overflow-hidden bg-gradient-to-br from-primary/15 via-base-200 to-secondary/15 p-8 sm:p-10 rounded-3xl border border-base-300 shadow-sm mt-10">
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 rounded-full bg-primary/10 blur-3xl pointer-events-none"></div>
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-2">
@@ -279,15 +289,20 @@ export default function ClassManager() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="block text-xs font-bold uppercase tracking-wider opacity-70">Teacher ID (Optional)</label>
-                <input
-                  type="text"
+                <label className="block text-xs font-bold uppercase tracking-wider opacity-70">Class Teacher</label>
+                <select
                   name="classTeacherId"
                   value={classForm.classTeacherId}
                   onChange={handleClassChange}
-                  placeholder="Teacher ID"
-                  className="w-full px-4 py-3 bg-base-100 border border-base-300 rounded-2xl text-xs font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary font-mono"
-                />
+                  className="w-full px-4 py-3 bg-base-100 border border-base-300 rounded-2xl text-xs font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                >
+                  <option value="">Select Teacher</option>
+                  {teachersList.map((teacher: any) => (
+                    <option key={teacher.id || teacher._id} value={teacher.id || teacher._id}>
+                      {teacher.name} ({teacher.email})
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -327,38 +342,43 @@ export default function ClassManager() {
             ) : classesError ? (
               <div className="p-8 text-center text-xs text-error">Failed to load classes.</div>
             ) : classesList.length > 0 ? (
-              classesList.map((cls: any) => (
-                <div key={cls.id || cls._id} className="p-5 bg-base-100 border border-base-300 rounded-2xl shadow-xs hover:border-primary transition-all flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-black text-sm text-primary">{cls.gradeLevel} — {cls.stream}</h3>
-                      <span className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-extrabold uppercase rounded-lg">
-                        {cls.academicYear}
-                      </span>
+              classesList.map((cls: any) => {
+                const assignedTeacher = teachersList.find(
+                  (t: any) => (t.id || t._id) === cls.classTeacherId
+                );
+                return (
+                  <div key={cls.id || cls._id} className="p-5 bg-base-100 border border-base-300 rounded-2xl shadow-xs hover:border-primary transition-all flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-black text-sm text-primary">{cls.gradeLevel} — {cls.stream}</h3>
+                        <span className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-extrabold uppercase rounded-lg">
+                          {cls.academicYear}
+                        </span>
+                      </div>
+                      <p className="text-xs opacity-70">
+                        Teacher: <span className="font-semibold text-base-content">{assignedTeacher ? assignedTeacher.name : 'Not Assigned'}</span>
+                      </p>
                     </div>
-                    <p className="text-xs font-mono opacity-70">
-                      Teacher ID: {cls.classTeacherId || 'Not Assigned'}
-                    </p>
-                  </div>
 
-                  <div className="flex items-center gap-2 w-full md:w-auto justify-end">
-                    <button
-                      onClick={() => handleEditClassClick(cls)}
-                      className="p-2 bg-base-200 text-base-content rounded-xl hover:bg-primary/20 hover:text-primary transition-all cursor-pointer"
-                      title="Edit Class"
-                    >
-                      <Edit3 className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteClassClick(cls.id || cls._id)}
-                      className="p-2 bg-error/10 text-error rounded-xl hover:bg-error hover:text-error-content transition-all cursor-pointer"
-                      title="Delete Class"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center gap-2 w-full md:w-auto justify-end">
+                      <button
+                        onClick={() => handleEditClassClick(cls)}
+                        className="p-2 bg-base-200 text-base-content rounded-xl hover:bg-primary/20 hover:text-primary transition-all cursor-pointer"
+                        title="Edit Class"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClassClick(cls.id || cls._id)}
+                        className="p-2 bg-error/10 text-error rounded-xl hover:bg-error hover:text-error-content transition-all cursor-pointer"
+                        title="Delete Class"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className="p-10 text-center text-xs opacity-60 border-2 border-dashed border-base-300 rounded-3xl">
                 No classes found for academic year {academicYearFilter}.

@@ -3,11 +3,12 @@ import { toast, Toaster } from 'sonner';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
-import { Eye, EyeOff, Lock, Mail, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail,  ArrowRight } from 'lucide-react';
 import { useLoginUserMutation } from '../../features/Apis/Auth.Api';
 import { setCredentials } from '../../features/Auth/AuthSlice';
 import { Navbar } from '../../components/Navbar';
 import { usePageSeo } from '../../hooks/usePageSeo';
+import { Footer } from '../../components/Footer';
 
 interface LoginDetails {
   identifier: string;
@@ -16,9 +17,9 @@ interface LoginDetails {
 
 const Login = () => {
   usePageSeo({
-    title: "Login | ElimuCloud Secure Multi-Tenant School Portal",
-    description: "Access your institutional portal securely. Role-based login for administrators, teachers, accountants, parents, and students on ElimuCloud, engineered by  Gakenye Ndiritu.",
-    keywords: "ElimuCloud login, school portal sign in, student portal Kenya, school management system login,  Gakenye Ndiritu"
+    title: "Login | Academiq Secure Multi-Tenant School Portal",
+    description: "Access your institutional portal securely. Role-based login for administrators, teachers, accountants, parents, and students on Academiq, engineered by  Gakenye Ndiritu.",
+    keywords: "Academiq login, school portal sign in, student portal Kenya, school management system login,  Gakenye Ndiritu"
   });
   const { register, handleSubmit, formState: { errors } } = useForm<LoginDetails>();
   const [loginUser, { isLoading }] = useLoginUserMutation();
@@ -43,20 +44,20 @@ const Login = () => {
       // Role-based redirection mapping
       switch (userRole) {
         case 'super_admin':
-          navigate('/superAdmindashboard/AllUsers');
+          navigate('/superAdmin-dashboard/schools');
           break;
         case 'school_admin':
         case 'admin':
-          navigate('/schoolAdmindashboard');
+          navigate('/schoolAdmin-dashboard');
           break;
         case 'teacher':
-          navigate('/teacherdashboard');
+          navigate('/teacher-dashboard');
           break;
         case 'student':
-          navigate('/studentdashboard');
+          navigate('/student-dashboard');
           break;
         case 'parent':
-          navigate('/parentdashboard');
+          navigate('/parent-dashboard');
           break;
         default:
           navigate('/Admissions');
@@ -86,9 +87,7 @@ const Login = () => {
           <div className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-black/10 blur-3xl pointer-events-none"></div>
 
           <div className="relative z-10 max-w-lg space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold tracking-wider uppercase border border-white/20">
-              <ShieldCheck className="w-4 h-4" /> Secure Portal Gateway
-            </div>
+            
             <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
               Empowering Education Through Smart Management.
             </h1>
@@ -119,7 +118,7 @@ const Login = () => {
             
             <div className="mb-8 text-left">
               <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-base-content">
-                Sign In to ElimuCloud
+                Sign In to Academiq
               </h2>
               <p className="text-sm text-base-content/60 mt-1.5">
                 Enter your account details to access your dashboard.
@@ -213,6 +212,8 @@ const Login = () => {
         </div>
 
       </div>
+
+      <Footer/>
     </>
   );
 };

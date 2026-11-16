@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-
-import { Menu, ChevronLeft, ChevronRight, ShieldCheck, Sparkles } from "lucide-react";
+import { Menu, ChevronLeft, ChevronRight, ShieldCheck, Sparkles, X } from "lucide-react";
 import { Navbar } from "../../components/Navbar";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../App/store";
@@ -23,128 +22,187 @@ export const SchoolAdminLayout = () => {
   const secondaryColor = school?.secondaryColor || '#f59e0b';
 
   return (
-    <div 
+    <div
       className="min-h-screen flex flex-col bg-base-100 text-base-content selection:bg-primary selection:text-primary-content"
       style={{
         '--school-primary': primaryColor,
         '--school-secondary': secondaryColor,
       } as React.CSSProperties}
     >
-      {/* Top Sticky Navigation */}
-      <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-base-100/90 border-b border-base-300/60 shadow-xs transition-all duration-300">
-        <Navbar />
-      </header>
+      {/* ── Local styles: scrollbar + animations ── */}
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(100, 116, 139, 0.25);
+          border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(100, 116, 139, 0.45);
+        }
+        @keyframes slideRight {
+          from { transform: translateX(-100%); opacity: 0; }
+          to   { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes floatIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .anim-slide-right { animation: slideRight 0.32s cubic-bezier(0.22,1,0.36,1) both; }
+        .anim-fade-in     { animation: fadeIn 0.3s ease-out both; }
+        .anim-float-in    { animation: floatIn 0.45s cubic-bezier(0.22,1,0.36,1) both; }
+        @media (prefers-reduced-motion: reduce) {
+          .anim-slide-right, .anim-fade-in, .anim-float-in { animation: none !important; }
+        }
+      `}</style>
 
-      {/* Main App Workspace Shell */}
-      <div className="flex flex-1 relative min-h-[calc(100vh-4rem)]">
-        {/* Mobile Floating Drawer Trigger */}
+      {/* Fixed Navbar (comes from your global Navbar component) */}
+      <Navbar />
+
+      {/* Shell — pt-16 makes room for the fixed navbar height (4rem) */}
+      <div className="flex flex-1 pt-16">
+        {/* ── Mobile FAB ── */}
         <button
           onClick={() => setSidebarOpen(true)}
-          className="md:hidden fixed bottom-6 right-6 z-50 p-4 text-white rounded-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center ring-4 ring-primary/20"
+          className="md:hidden fixed bottom-6 right-6 z-50 p-4 text-white rounded-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center ring-4 ring-white/25"
           style={{ backgroundColor: primaryColor }}
           aria-label="Open Sidebar Menu"
         >
           <Menu size={20} />
         </button>
 
-        {/* Desktop Collapsible Sidebar */}
+        {/* ── Desktop Collapsible Sidebar ── */}
         <aside
-          className={`hidden md:flex flex-col sticky top-[4rem] h-[calc(100vh-4rem)] z-30 bg-base-200/50 backdrop-blur-xl border-r border-base-300/60 shadow-sm transition-all duration-300 ease-in-out shrink-0 ${
-            isCollapsed ? "w-20" : "w-72"
+          className={`hidden md:flex flex-col sticky top-16 h-[calc(100vh-4rem)] z-30 bg-base-200/60 backdrop-blur-md border-r border-base-300/60 shadow-sm transition-[width] duration-300 ease-in-out shrink-0 ${
+            isCollapsed ? "w-[84px]" : "w-[280px]"
           }`}
         >
-          {/* Sidebar Header & Collapse Toggle */}
-          <div className="flex items-center justify-between px-4 py-4 border-b border-base-300/40 bg-transparent shrink-0">
+          {/* Sidebar header + collapse toggle */}
+          <div className="flex items-center justify-between px-3 py-3 border-b border-base-300/50 shrink-0 gap-2">
             {!isCollapsed && (
-              <div className="flex items-center gap-2.5 overflow-hidden">
-                <div 
-                  className="w-2 h-2 rounded-full animate-pulse shrink-0" 
+              <div className="flex items-center gap-2.5 overflow-hidden min-w-0">
+                <span
+                  className="w-2 h-2 rounded-full shrink-0 shadow"
                   style={{ backgroundColor: secondaryColor }}
                 />
-                <span className="text-xs font-black uppercase tracking-wider text-base-content/75 truncate">
-                  {school?.name ? `${school.name}` : 'Management Hub'}
+                <span className="text-[11px] font-black uppercase tracking-widest text-base-content/70 truncate">
+                  {school?.name || "Management Hub"}
                 </span>
               </div>
             )}
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="p-2 rounded-xl bg-base-200 hover:bg-base-300 text-base-content/70 hover:text-base-content transition-all duration-200 hover:scale-105 shadow-2xs ml-auto"
+              className="p-2 rounded-xl bg-base-200 hover:bg-base-300 text-base-content/70 hover:text-base-content transition-all duration-300 hover:scale-105 shadow-sm ml-auto shrink-0"
               aria-label={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
               title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
             >
-              {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+              <ChevronLeft
+                size={16}
+                className={`transition-transform duration-300 ${isCollapsed ? "rotate-180" : ""}`}
+              />
             </button>
           </div>
 
-          {/* Sidebar Navigation Items Container (Fully Visible, Scrollable) */}
-          <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
+          {/* Scrollable nav */}
+          <div className="flex-1 overflow-y-auto overflow-x-hidden p-2 custom-scrollbar">
             <SchoolAdminSideNav
-              onNavItemClick={() => {}} 
-              isCollapsed={isCollapsed} 
+              onNavItemClick={() => {}}
+              isCollapsed={isCollapsed}
             />
           </div>
 
-          {/* Sidebar Footer Branding / Status Strip */}
+          {/* Footer status chip */}
           {!isCollapsed && (
-            <div className="p-3 mx-3 mb-3 rounded-2xl bg-base-100/80 border border-base-300/60 flex items-center gap-3 transition-all duration-300 shadow-2xs shrink-0">
-              <div 
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-xs shrink-0 font-bold"
+            <div className="p-3 mx-2 mb-2 rounded-2xl bg-base-100/70 border border-base-300/60 flex items-center gap-3 shadow-sm shrink-0 anim-fade-in">
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 font-bold shadow-md"
                 style={{ backgroundColor: primaryColor }}
               >
                 <ShieldCheck size={16} />
               </div>
-              <div className="overflow-hidden">
-                <p className="text-xs font-bold truncate">Secure Session</p>
-                <p className="text-[10px] text-base-content/60 capitalize flex items-center gap-1 font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-success"></span> {role?.replace('_', ' ') || 'Admin'}
+              <div className="overflow-hidden min-w-0">
+                <p className="text-[11px] font-bold truncate">Secure Session</p>
+                <p className="text-[10px] text-base-content/60 capitalize flex items-center gap-1.5 font-medium truncate">
+                  <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse shrink-0" />
+                  {role?.replace('_', ' ') || 'Admin'} Active
                 </p>
               </div>
             </div>
           )}
         </aside>
 
-        {/* Mobile Slide-Over Drawer & Backdrop */}
+        {/* ── Mobile Drawer + Backdrop ── */}
         {sidebarOpen && (
           <>
             <div
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs transition-opacity animate-fadeIn md:hidden"
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm anim-fade-in md:hidden"
               onClick={() => setSidebarOpen(false)}
             />
-            <aside className="fixed top-0 left-0 bottom-0 z-50 w-80 bg-base-200 text-base-content border-r border-base-300 shadow-2xl md:hidden flex flex-col animate-slideRight">
-              <div className="flex items-center justify-between p-4 border-b border-base-300 bg-base-200 shrink-0">
-                <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: secondaryColor }} />
-                  <span className="font-black text-xs uppercase tracking-wider text-primary" style={{ color: primaryColor }}>
-                    {school?.name || 'Admin Portal'}
-                  </span>
+            <aside className="fixed top-0 left-0 bottom-0 z-50 w-[85vw] max-w-[320px] bg-base-100 shadow-2xl md:hidden flex flex-col anim-slide-right">
+              {/* Drawer header */}
+              <div className="flex items-center justify-between p-4 border-b border-base-300 bg-base-200/60 shrink-0">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-md shrink-0"
+                    style={{ backgroundColor: primaryColor }}
+                  >
+                    <Sparkles size={16} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[10px] uppercase font-black tracking-widest text-base-content/50 truncate">
+                      {role?.replace('_', ' ') || 'Admin'} Portal
+                    </p>
+                    <p className="text-sm font-bold text-base-content truncate">
+                      {school?.name || 'Management Hub'}
+                    </p>
+                  </div>
                 </div>
                 <button
                   onClick={() => setSidebarOpen(false)}
-                  className="btn btn-sm btn-ghost btn-square rounded-xl hover:bg-base-300"
+                  className="p-2 rounded-xl hover:bg-base-300 transition-colors shrink-0"
                   aria-label="Close Sidebar"
                 >
-                  ✕
+                  <X size={18} />
                 </button>
               </div>
-              <div className="flex-1 overflow-y-auto custom-scrollbar">
-                <SchoolAdminSideNav onNavItemClick={() => setSidebarOpen(false)} isCollapsed={false} />
+
+              {/* Drawer nav */}
+              <div className="flex-1 overflow-y-auto p-2 custom-scrollbar">
+                <SchoolAdminSideNav
+                  onNavItemClick={() => setSidebarOpen(false)}
+                  isCollapsed={false}
+                />
               </div>
-              <div className="p-4 border-t border-base-300/60 bg-base-100/50 flex items-center gap-3 shrink-0">
-                <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold shadow-xs" style={{ backgroundColor: primaryColor }}>
-                  <Sparkles size={14} />
-                </div>
-                <div>
-                  <p className="text-xs font-bold">Role: {role?.replace('_', ' ') || 'Admin'}</p>
-                  <p className="text-[10px] text-base-content/60 font-medium">Multi-Tenant Secured Environment</p>
+
+              {/* Drawer footer */}
+              <div className="p-3 border-t border-base-300 bg-base-300/30 shrink-0">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-md shrink-0"
+                    style={{ backgroundColor: primaryColor }}
+                  >
+                    <ShieldCheck size={16} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-bold truncate">Secure Session</p>
+                    <p className="text-[10px] text-base-content/60 capitalize flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse shrink-0" />
+                      {role?.replace('_', ' ') || 'Admin'} Active
+                    </p>
+                  </div>
                 </div>
               </div>
             </aside>
           </>
         )}
 
-        {/* Dynamic Main Workspace Outlet */}
-        <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-base-100">
-          <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1700px] w-full mx-auto animate-fadeIn">
+        {/* ── Main content ── */}
+        <main className="flex-1 flex flex-col min-w-0 min-h-[calc(100vh-4rem)] overflow-y-auto bg-base-100">
+          <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1700px] w-full mx-auto anim-float-in">
             <Outlet />
           </div>
         </main>
