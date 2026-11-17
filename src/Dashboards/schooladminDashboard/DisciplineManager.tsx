@@ -2,10 +2,10 @@ import React, { useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../App/store';
 import {
-  FileText, History, BarChart3, Sparkles, Building, Users, School,
+  FileText, History, BarChart3, Building, Users, School,
   Award, AlertCircle, Clock, Timer, Ban, Bell, BellOff, Plus, X,
-  Check, Trash2, Edit3, Save, Search, Loader2, ChevronDown, ChevronRight,
-  Calendar, Filter, TrendingUp, Medal, CheckCircle2, ShieldAlert,
+  Trash2, Edit3, Save, Search, Loader2, ChevronDown, ChevronRight,
+  Filter, TrendingUp, Medal, CheckCircle2, ShieldAlert,
 } from 'lucide-react';
 
 import { useGetSchoolByIdQuery } from '../../features/Apis/School.Api';
@@ -193,7 +193,6 @@ export default function DisciplineManager() {
       {activeTab === 'record' && (
         <RecordTab
           schoolId={currentSchoolId}
-          schoolName={schoolName}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           setSuccessMessage={setSuccessMessage}
@@ -270,8 +269,8 @@ function fmtTime(d?: string | null): string {
    RECORD TAB
    ════════════════════════════════════════════════════════════════ */
 function RecordTab({
-  schoolId, schoolName, primaryColor, secondaryColor, setSuccessMessage, setErrorMessage,
-}: SectionProps & { schoolName: string }) {
+  schoolId, primaryColor, secondaryColor, setSuccessMessage, setErrorMessage,
+}: SectionProps) {
   // Single form state
   const [form, setForm] = useState({
     studentId: '',
@@ -716,9 +715,13 @@ function IncidentMiniCard({ incident, studentMap }: { incident: DisciplineIncide
               {info.label}
             </span>
             {incident.parentNotified ? (
-              <Bell className="w-3 h-3 text-success" title="Guardians notified" />
+              <span title="Guardians notified">
+                <Bell className="w-3 h-3 text-success" />
+              </span>
             ) : (
-              <BellOff className="w-3 h-3 text-base-content/40" title="Not notified" />
+              <span title="Not notified">
+                <BellOff className="w-3 h-3 text-base-content/40" />
+              </span>
             )}
           </div>
           <p className="mt-1 text-[11px] opacity-70 line-clamp-2">{incident.description}</p>
@@ -930,7 +933,6 @@ function BrowseTab({
                 key={incident.id}
                 incident={incident}
                 studentMap={studentMap}
-                schoolId={schoolId}
                 primaryColor={primaryColor}
                 setSuccessMessage={setSuccessMessage}
                 setErrorMessage={setErrorMessage}
@@ -944,11 +946,10 @@ function BrowseTab({
 }
 
 function IncidentCard({
-  incident, studentMap, schoolId, primaryColor, setSuccessMessage, setErrorMessage,
+  incident, studentMap, primaryColor, setSuccessMessage, setErrorMessage,
 }: {
   incident: DisciplineIncident;
   studentMap: Map<string, Student>;
-  schoolId: string;
   primaryColor: string;
   setSuccessMessage: (v: string) => void;
   setErrorMessage: (v: string) => void;
@@ -1108,6 +1109,8 @@ function IncidentCard({
 /* ════════════════════════════════════════════════════════════════
    INSIGHTS TAB
    ════════════════════════════════════════════════════════════════ */
+type TopOffender = { studentId?: string; studentName?: string; count: number };
+
 function InsightsTab({ schoolId, primaryColor, secondaryColor }: {
   schoolId: string;
   primaryColor: string;
@@ -1152,7 +1155,11 @@ function InsightsTab({ schoolId, primaryColor, secondaryColor }: {
     classId,
     { skip: !classId }
   );
-  const classSummary = (classSummaryData as any)?.summary ?? {};
+  const classSummary: {
+    totalIncidents?: number;
+    byType?: Record<string, number>;
+    topOffenders?: TopOffender[];
+  } = (classSummaryData as any)?.summary ?? {};
 
   // Trend chart
   const maxTrend = Math.max(1, ...trend.map((p) => p.count));
@@ -1373,7 +1380,7 @@ function InsightsTab({ schoolId, primaryColor, secondaryColor }: {
                           <span className="w-6 h-6 rounded-full bg-error/10 text-error text-[10px] font-black grid place-items-center">
                             {i + 1}
                           </span>
-                          <span className="flex-1 text-xs font-bold truncate">{o.studentName ?? o.studentId.slice(0, 8)}</span>
+                          <span className="flex-1 text-xs font-bold truncate">{o.studentName ?? o.studentId?.slice(0, 8) ?? 'Unknown'}</span>
                           <span className="text-xs font-black text-error">{o.count}</span>
                         </div>
                       ))}
