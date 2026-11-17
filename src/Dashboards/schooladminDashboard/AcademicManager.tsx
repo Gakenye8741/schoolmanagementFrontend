@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../../App/store';
 import {
   GraduationCap, BookOpen, School, Link2, Sparkles, Building,
-  Layers, PlusCircle, Edit3, Trash2, CheckCircle2, AlertCircle,
+  Layers, Edit3, Trash2, CheckCircle2, AlertCircle,
   ArrowUp, ArrowDown, X, Save, ShieldCheck, Users, UserCheck,
   Search, Loader2, Calendar,
 } from 'lucide-react';
@@ -18,7 +18,6 @@ import {
   useDeleteGradeLevelMutation,
   useReorderGradeLevelsMutation,
   useValidatePromotionLadderQuery,
-  useGetPromotionSummaryQuery,
   useGetSubjectsBySchoolQuery,
   useCreateSubjectMutation,
   useUpdateSubjectMutation,
@@ -43,8 +42,14 @@ import {
 } from '../../features/Apis/academicStructure.Api';
 
 // ── Users API (teachers) ──────────────────────────────────────
-// ⚠️ Users.Api.ts doesn't export `User` — use a local type instead
-import { useGetTeachersBySchoolQuery } from '../../features/Apis/Users.Api';
+// We import TWO hooks so teacher-fetch is robust:
+//   1. useGetTeachersBySchoolQuery  → GET /users/teachers?schoolId=...
+//   2. useGetSchoolUsersByRoleQuery → GET /schools/{id}/users/by-role/teacher
+// If one endpoint is missing on the backend, the other still works.
+import {
+  useGetTeachersBySchoolQuery,
+  useGetSchoolUsersByRoleQuery,
+} from '../../features/Apis/Users.Api';
 
 type TeacherUser = {
   id: string;
@@ -59,7 +64,6 @@ type TeacherUser = {
 };
 
 // ── Students API ──────────────────────────────────────────────
-// ⚠️ Removed unused `useGetStudentsByClassQuery` import
 import {
   useGetStudentsBySchoolQuery,
   type Student,
@@ -228,6 +232,12 @@ function teacherLabel(t: TeacherUser): string {
   return `${name}${id}`;
 }
 
+function teacherInitials(t: TeacherUser): string {
+  const name = t.name || [t.firstName, t.lastName].filter(Boolean).join(' ') || '?';
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0] ?? '?') + (parts[1]?.[0] ?? '')).toUpperCase();
+}
+
 function studentLabel(s: Student): string {
   const name = `${s.firstName ?? ''} ${s.middleName ? s.middleName + ' ' : ''}${s.lastName ?? ''}`.trim() || 'Unnamed';
   const adm = s.admissionNumber ? ` · ${s.admissionNumber}` : '';
@@ -250,7 +260,6 @@ function GradeLevelsSection({
 
   const { data: gradesData, isLoading, error } = useGetGradeLevelsBySchoolQuery(schoolId);
   const { data: ladderData } = useValidatePromotionLadderQuery(schoolId);
-  const { data: summaryData } = useGetPromotionSummaryQuery(schoolId);
 
   const [createGradeLevel, { isLoading: creating }] = useCreateGradeLevelMutation();
   const [updateGradeLevel, { isLoading: updating }] = useUpdateGradeLevelMutation();
@@ -533,7 +542,7 @@ function SubjectsSection({
 }
 
 // ════════════════════════════════════════════════════════════════
-// CLASSES — with teacher dropdown + teacher name on cards
+// CLASSES — robust teacher picker (multi-endpoint fallback)
 // ════════════════════════════════════════════════════════════════
 function ClassesSection({
   schoolId, primaryColor, secondaryColor, setSuccessMessage, setErrorMessage,
@@ -544,11 +553,26 @@ function ClassesSection({
     gradeLevelId: '', stream: '', academicYear: String(new Date().getFullYear()),
     classTeacherId: '', capacity: '40',
   });
+  const [teacherSearch, setTeacherSearch] = useState('');
 
   const { data: classesData, isLoading, error } = useGetClassesBySchoolQuery(schoolId);
   const { data: gradesData } = useGetGradeLevelsBySchoolQuery(schoolId);
 
-  const { data: teachersData, isLoading: loadingTeachers } = useGetTeachersBySchoolQuery(schoolId);
+  // ── Teachers: try BOTH endpoints; whichever returns data wins ──
+  const {
+    data: teachersBySchoolData,
+    isLoading: loadingTeachersBySchool,
+  } = useGetTeachersBySchoolQuery(schoolId);
+
+  const {
+    data: teachersByRoleData,
+    isLoading: loadingTeachersByRole,
+  } = useGetSchoolUsersByRoleQuery(
+    { schoolId, role: 'teacher' },
+    { skip: !schoolId }
+  );
+
+  const loadingTeachers = loadingTeachersBySchool && loadingTeachersByRole;
 
   const [createClass, { isLoading: creating }] = useCreateClassMutation();
   const [updateClass, { isLoading: updating }] = useUpdateClassMutation();
@@ -559,12 +583,35 @@ function ClassesSection({
     return Array.isArray(raw) ? raw : [];
   }, [gradesData]);
 
-  const teachers: TeacherUser[] = useMemo(() => extractTeachers(teachersData), [teachersData]);
+  // Combine both sources — dedupe by id, prefer first non-empty result
+  const teachers: TeacherUser[] = useMemo(() => {
+    const primary = extractTeachers(teachersBySchoolData);
+    if (primary.length > 0) return primary;
+    return extractTeachers(teachersByRoleData);
+  }, [teachersBySchoolData, teachersByRoleData]);
+
   const teacherMap = useMemo(() => {
     const m = new Map<string, TeacherUser>();
     teachers.forEach((t) => m.set(t.id, t));
     return m;
   }, [teachers]);
+
+  // Filter teacher dropdown by search
+  const filteredTeachers = useMemo(() => {
+    const q = teacherSearch.trim().toLowerCase();
+    if (!q) return teachers;
+    return teachers.filter((t) => {
+      const name = (t.name || [t.firstName, t.lastName].filter(Boolean).join(' ') || '').toLowerCase();
+      const tsc = (t.tscNumber ?? '').toLowerCase();
+      const email = (t.email ?? '').toLowerCase();
+      return name.includes(q) || tsc.includes(q) || email.includes(q);
+    });
+  }, [teachers, teacherSearch]);
+
+  const selectedTeacher = useMemo(
+    () => teachers.find((t) => t.id === form.classTeacherId) ?? null,
+    [teachers, form.classTeacherId]
+  );
 
   const classes: ClassEntity[] = useMemo(() => {
     const raw = (classesData as any)?.classes ?? (classesData as any)?.data ?? [];
@@ -573,6 +620,7 @@ function ClassesSection({
 
   const resetForm = () => {
     setForm({ gradeLevelId: '', stream: '', academicYear: String(new Date().getFullYear()), classTeacherId: '', capacity: '40' });
+    setTeacherSearch('');
     setIsEditing(false); setEditingId(null);
   };
   const handleEdit = (c: ClassEntity) => {
@@ -580,6 +628,7 @@ function ClassesSection({
       gradeLevelId: c.gradeLevelId, stream: c.stream, academicYear: c.academicYear,
       classTeacherId: c.classTeacherId ?? '', capacity: String(c.capacity),
     });
+    setTeacherSearch('');
     setIsEditing(true); setEditingId(c.id);
   };
   const handleSubmit = async (e: React.FormEvent) => {
@@ -648,21 +697,65 @@ function ClassesSection({
               <label className="block text-xs font-bold uppercase tracking-wider opacity-70">Capacity</label>
               <input type="number" value={form.capacity} onChange={(e) => setForm({ ...form, capacity: e.target.value })} placeholder="40" required className="w-full px-4 py-3 bg-base-100 border border-base-300 rounded-2xl text-xs font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary" />
             </div>
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider opacity-70">
-                <UserCheck className="w-3.5 h-3.5" /> Class Teacher
+            <div className="space-y-1.5 col-span-2">
+              <label className="flex items-center justify-between text-xs font-bold uppercase tracking-wider opacity-70">
+                <span className="flex items-center gap-1.5"><UserCheck className="w-3.5 h-3.5" /> Class Teacher</span>
+                <span className="font-mono normal-case opacity-60">
+                  {loadingTeachers ? '…' : `${teachers.length} available`}
+                </span>
               </label>
+
+              {!loadingTeachers && teachers.length === 0 && (
+                <p className="text-[10px] text-warning font-mono px-1 mb-1">
+                  ⚠ No teachers found. Create teachers in User Manager first.
+                </p>
+              )}
+
+              {teachers.length > 15 && (
+                <input
+                  type="text"
+                  value={teacherSearch}
+                  onChange={(e) => setTeacherSearch(e.target.value)}
+                  placeholder="Filter teachers by name, TSC, or email…"
+                  className="mb-1 w-full px-3 py-2 bg-base-100 border border-base-300 rounded-xl text-xs focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                />
+              )}
+
               <select
                 value={form.classTeacherId}
                 onChange={(e) => setForm({ ...form, classTeacherId: e.target.value })}
                 disabled={loadingTeachers}
                 className="w-full px-4 py-3 bg-base-100 border border-base-300 rounded-2xl text-xs font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer disabled:opacity-60"
               >
-                <option value="">{loadingTeachers ? 'Loading teachers…' : '— No teacher assigned —'}</option>
-                {teachers.map((t) => (
+                <option value="">
+                  {loadingTeachers
+                    ? 'Loading teachers…'
+                    : filteredTeachers.length === 0 && teachers.length > 0
+                    ? 'No teachers match filter'
+                    : '— No teacher assigned —'}
+                </option>
+                {filteredTeachers.map((t) => (
                   <option key={t.id} value={t.id}>{teacherLabel(t)}</option>
                 ))}
               </select>
+
+              {/* Selected teacher preview card */}
+              {selectedTeacher && (
+                <div className="mt-2 flex items-center gap-3 px-4 py-3 bg-primary/5 border border-primary/20 rounded-2xl">
+                  <div className="w-9 h-9 rounded-full bg-primary/15 text-primary grid place-items-center font-black text-xs">
+                    {teacherInitials(selectedTeacher)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-black truncate">
+                      {selectedTeacher.name || [selectedTeacher.firstName, selectedTeacher.lastName].filter(Boolean).join(' ')}
+                    </p>
+                    <p className="text-[10px] font-mono opacity-60 truncate">
+                      {selectedTeacher.tscNumber ? `TSC ${selectedTeacher.tscNumber}` : selectedTeacher.email ?? '—'}
+                      {selectedTeacher.phone ? ` · ${selectedTeacher.phone}` : ''}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -765,10 +858,8 @@ function StudentLinkingSection({
   const { data: classesData } = useGetClassesBySchoolQuery(schoolId);
   const { data: gradesData } = useGetGradeLevelsBySchoolQuery(schoolId);
 
-  // Students from studentApi
   const { data: studentsData, isLoading: loadingStudents } = useGetStudentsBySchoolQuery(schoolId);
 
-  // Terms from termApi
   const { data: termsData, isLoading: loadingTerms } = useGetTermsBySchoolIdQuery(schoolId, { skip: !schoolId });
   const { data: currentTermData } = useGetCurrentTermBySchoolIdQuery(schoolId, { skip: !schoolId });
 
